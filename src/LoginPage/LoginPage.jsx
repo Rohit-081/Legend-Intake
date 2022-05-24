@@ -5,20 +5,23 @@ function LoginPage() {
     
   return (
       <>
-           <form>
+           <form className='form-control'>
                <div className="container">
-                   <h1>Login Form</h1>
-                <label for="uname"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="uname" required />
+                   <div className="form-login">
+                         <h1>Login Form</h1>
+                   </div>
+                  
+                    <div className="form-flex"> 
+                        <label for="uname"><b>Username:</b></label>
+                        <input type="text" placeholder="Enter Username" name="uname" required />
+                    </div>
 
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required />
-
-                <button type="submit">Login</button>
-                <label>
-                <input type="checkbox" checked="checked" name="remember" /> Remember me
-                </label>
-            </div>
+                    <div className="form-flex">
+                        <label for="psw"><b>Password:</b></label>
+                        <input type="password" placeholder="Enter Password" name="psw" required />
+                    </div>               
+                    <button type="submit">Login</button>    
+                </div>
             </form>
       </>
   );

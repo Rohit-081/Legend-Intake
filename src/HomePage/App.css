@@ -48,11 +48,6 @@ button:hover {
   width: 50%;
 }
 
-.form-control{
-  display: flex;
-  justify-content: center;
-}
-
 /* Add padding to container elements */
 .container {
   padding: 16px;
@@ -61,6 +56,24 @@ button:hover {
   flex-direction: column;
   justify-items: center;
   align-items: center;
+}
+.form-flex-btn{
+  display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+}
+    
+
+.form-control{
+  display: flex;
+  justify-content: center;
+}
+
+
+.form-flex{
+      display: flex;
+      flex-direction: column;     
+      width: 100%;
 }
 
 /* Clear floats */
