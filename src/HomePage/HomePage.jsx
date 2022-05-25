@@ -2,8 +2,10 @@ import React,{useState} from 'react'
 import './App.css'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
 
 const  HomePage = () => {
+      const nav = useNavigate();
       const [startDate, setStartDate] = useState(new Date());
       const [exStartDate, setExStartDate] = useState(new Date());
       const [exEndDate, setExEndDate] = useState(new Date());
@@ -128,6 +130,7 @@ const  HomePage = () => {
                    isCollect: '',
                    personalDataType:''
                   });
+                  nav('/success');
              
       //  }else{
       //        alert("Fill all the fields!")

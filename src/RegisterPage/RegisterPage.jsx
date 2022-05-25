@@ -1,11 +1,12 @@
 import React, { useState }  from 'react'
 import './App.css'
+import { useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
   const [registerData, setRegisterData] = useState({ email: '', psw: '', pswrepeat: '' });
   const [registerDetails, setRegisterDetails] = useState([]);
-
+  const nav = useNavigate();
   const handleChange = (e) => {
     console.log(e.target.value);
     const name = e.target.name;
@@ -19,6 +20,7 @@ const RegisterPage = () => {
       const newPerson = { ...registerData, id: new Date().getTime().toString() };
       setRegisterDetails([...registerDetails, newPerson]);
       setRegisterData({ email: '', psw: '', pswrepeat: '' });
+      nav("/login");
     }
     console.log(registerData);
     console.log(registerDetails);

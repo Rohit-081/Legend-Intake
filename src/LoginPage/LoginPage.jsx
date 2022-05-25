@@ -1,9 +1,13 @@
 import React,{useState} from 'react'
 import './App.css'
+import { useNavigate } from "react-router-dom";
+
+
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({ uname: '', psw: ''});
   const [loginDetails, setLoginDetails] = useState([]);
+  const nav = useNavigate();
 
   const handleChange = (e) => {
     console.log(e.target.value);
@@ -19,6 +23,7 @@ function LoginPage() {
       const newPerson = { ...loginData, id: new Date().getTime().toString() };
       setLoginDetails([...loginDetails, newPerson]);
       setLoginData({ uname: '', psw: ''});
+      nav("/");
     }
     console.log(loginData);
     console.log(loginDetails)
