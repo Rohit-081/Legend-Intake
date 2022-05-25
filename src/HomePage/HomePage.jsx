@@ -1,60 +1,82 @@
-import React from 'react'
+import React,{useState} from 'react'
 import './App.css'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-function HomePage() {
+const  HomePage = () => {
+      const [startDate, setStartDate] = useState(new Date());
+
+      const [legendData, setLegendData] = useState({
+            isProcurementInvolvement: "",
+            isProcurementDiligence:""
+            
+      })
+      const[legendDetails, setLegendDetails] = useState([]);
+
+      const handleChange = (e) => {
+            console.log(e.target.value);
+            const name = e.target.name;
+            const value = e.target.value;
+            setLegendData({ ...legendData, [name]: value });
+      };
+
+       const handleSubmit = (e) => {
+            e.preventDefault();
+             if (legendData.isProcurementInvolvement && legendData.isProcurementDiligence) {
+             const newLegendData = { ...legendData, id: new Date().getTime().toString() };
+             setLegendDetails([...legendDetails, newLegendData]);
+             setLegendData({ 
+                   isProcurementInvolvement: '', 
+                   isProcurementDiligence: '' 
+                  });
+             
+      }
+      console.log(legendData);
+      console.log(legendDetails); 
+      console.log(startDate);
+  };
+
   return (
     <>
-        <form className="form-control">
+    <article>
+        <form className="form">
             <div className="container">
                  <div className="form-intake">
                         <h1>LEGAL CONTRACT INTAKE FORM</h1>
                         <p><b>Please complete and email this form to LegalContracts@LegendBiotech.com and include any relevant attachments (such as
                         previous agreements, proposed slides, proposed contracts and SOWs, and a description of the proposed terms of business, if
                         available.</b></p>
-                  </div> 
+                  </div>
+
                  <div className="form-flex">
-                        <label for="date"><b>Today's Date</b></label>
-                        <input type="date" placeholder="Enter date" name="date" required />
+                        <label><b>Today's Date</b></label>
+                         <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
                         <br />
                  </div>
                 
-                <div className="form-flex">
+                 <div className="form-flex" onChange={handleChange}>
                         <label><b>Procurement</b></label>
-                        <label for="procure"><b>Is Procurement Involvement Required?</b></label>
-                        <label>
-                        <input type="radio" value="yes" name="Pro" /> Yes 
-                        </label>
-                        <label htmlFor="">
-                              <input type="radio" value="no" name="Pro" /> No 
-                        </label>
+                        <label><b>Is Procurement Involvement Required?</b></label>
+                        <label><input type="radio" value="Yes" id="isProcurementInvolvement"  name="isProcurementInvolvement" /> Yes </label>
+                        <label><input type="radio" value="No" id="isProcurementInvolvement"  name="isProcurementInvolvement" /> No </label>
                         <br />
                 </div>
                 
-                  <div className="form-flex">       
-                        <label for="procure"><b>Is Procurement Diligence Substantially Completed?</b></label>
-                        <label>
-                              <input type="radio" value="yes" name="Pro" /> Yes
-                        </label>
-                        <label htmlFor="">
-                              <input type="radio" value="no" name="Pro" /> No
-                        </label>
+                  <div className="form-flex" onChange={handleChange}>       
+                        <label><b>Is Procurement Diligence Substantially Completed?</b></label>
+                        <label><input type="radio" value="Yes" id="isProcurementDiligence"  name="isProcurementDiligence" /> Yes</label>
+                        <label><input type="radio" value="No" id="isProcurementDiligence" name="isProcurementDiligence" /> No</label>
                         <br />
-                </div>
-
-                <div  className="form-flex">
-                        <p><b>Note: If you answered “No” to the question above and Procurement Diligence is required, please do not submit this form until
-                        Procurement Diligence is substantially completed.</b></p>
+                 </div> 
+                 <div  className="form-flex">
+                        <p><b>Note: If you answered “No” to the question above and Procurement Diligence is required, please do not submit this form until Procurement Diligence is substantially completed.</b></p>
                 </div>
                 
                 <div  className="form-flex">
-                        <label for="procure"><b>Request</b></label>
-                        <label>
-                        <input type="radio" value="yes" name="Pro" /> Legal Department reviews contract provided other party(ies)* </label>
-                       <label> <input type="radio" value="no" name="Pro" /> Legal Department prepares a contracts
-                        </label>
-                        <p><b>*Note: for Confidentiality Agreements and Services Agreement, preference is to
-                        use Legend Biotech forms.</b></p>
-                        
+                        <label><b>Request</b></label>
+                        <label><input type="radio" value="Legal Department reviews contract provided other party" name="legalDepartment" /> Legal Department reviews contract provided other party(ies)* </label>
+                        <label><input type="radio" value="Legal Department prepares a contracts" name="legalDepartment" />Legal Department prepares a contracts</label>
+                        <p><b>*Note: for Confidentiality Agreements and Services Agreement, preference is to use Legend Biotech forms.</b></p>   
                  </div>
             
                   <div  className="form-flex">
@@ -62,7 +84,7 @@ function HomePage() {
                         <label for="procure"><b>Is this a Capital Appropriation Request(CAR) related expenditure?</b></label>
                         <label>
                         <input type="radio" value="yes" name="Pro" /> Yes, Capital Appropriation Request destination</label>
-                       <label htmlFor=""><input type="radio" value="yes" name="Pro" /> Yes, Capital Appropriation Request destination</label> 
+                       <label htmlFor=""><input type="radio" value="yes" name="Pro" /> Yes, Capital Appropriation Request approval in process</label> 
                         <label htmlFor=""><input type="radio" value="no" name="Pro" /> No</label>
                         <p><b>*Note: if a Capital Appropriation Request related expenditure, Capital
                               Appropriation Request approval must be in-place before contract execution.</b></p>
@@ -283,14 +305,25 @@ function HomePage() {
                   <div className="form-flex">
                       <label><b>If yes, what type of personal data will be shared.</b></label>
                       <input type="text" placeholder="If yes, what type of personal data will be shared." name="personal data" required />
-                  </div>
+                  </div> 
 
                   <div className="form-flex-btn">
-                        <button>Save</button>
-                        <button>Submit</button>
+                        <button type="submit" >Save</button>
+                        <button type='submit' onClick={handleSubmit}>Submit</button>
                   </div>
             </div>
         </form>
+        </article>
+        <article>
+        {legendDetails.map((data)=>{
+                 return (
+                <div key={data.id}>
+                <h4>{data.isProcurementDiligence}</h4>
+                <h4>{data.isProcurementInvolvement}</h4>
+                </div>
+                )
+                })}
+      </article>
     </>
   )
 }
