@@ -5,7 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const  HomePage = () => {
       const [startDate, setStartDate] = useState(new Date());
-
+      const [exStartDate, setExStartDate] = useState(new Date());
+      const [exEndDate, setExEndDate] = useState(new Date());
       const [legendData, setLegendData] = useState({
             isProcurementInvolvement: "",
             isProcurementDiligence:"",
@@ -20,10 +21,31 @@ const  HomePage = () => {
             legendAddressOfOtherPartyToContractTwo:'',
             legendContactOneNameAndEmailToContractTwo:'',
             isThisRelatetoExistAgr:'',
-            isConfidentialityAgreement:''
+            isConfidentialityAgreement:'',
+            isSanctionsCheck:'',
+            istypeOfContract:'',
+            isIfAny:'',
+            isAutomaticRenewal:'',
+            isContractAmount:'',
+            isHourlyRate:'',
+            isMaxHours:'',
+            unitApprover:'',
+            unitRep: '',
+            isProRep: '',
+            supplyServiceContract: '',
+            specificMaterial: '',
+            PurposeTrans: '',
+            legendConfInfo: '',
+            otherConfInfo: '',
+            isConfidentiality:'',
+            legendConfidentialInfo:'',
+            otherPartyConf:'',
+            isCollect:'',
+            personalDataType:''
             
       })
       const[legendDetails, setLegendDetails] = useState([]);
+
 
       const handleChange = (e) => {
             console.log(e.target.value);
@@ -34,21 +56,41 @@ const  HomePage = () => {
 
        const handleSubmit = (e) => {
             e.preventDefault();
-             if (legendData.isProcurementInvolvement && 
-                  legendData.isProcurementDiligence && 
-                  legendData.isRequestLegalDepartment && 
-                  legendData.isCapitalAppropriationRequest &&
-                  legendData.legendBiotechContracting &&
-                  legendData.legendSubmittingDepartment &&
-                  legendData.legalNameOfOtherParty &&
-                  legendData.legendAddressOfOtherParty && 
-                  legendData.legendContactOneNameAndEmail &&
-                  legendData.legalNameOfOtherPartyToContractTwo &&
-                  legendData.legendAddressOfOtherPartyToContractTwo &&
-                  legendData.legendContactOneNameAndEmailToContractTwo &&
-                  legendData.isThisRelatetoExistAgr &&
-                  legendData.isConfidentialityAgreement) {
-             const newLegendData = { ...legendData, id: new Date().getTime().toString() };
+            //   if ( legendData.isProcurementInvolvement && 
+            //        legendData.isProcurementDiligence && 
+            //        legendData.isRequestLegalDepartment && 
+            //        legendData.isCapitalAppropriationRequest &&
+            //        legendData.legendBiotechContracting &&
+            //        legendData.legendSubmittingDepartment &&
+            //        legendData.legalNameOfOtherParty &&
+            //        legendData.legendAddressOfOtherParty && 
+            //        legendData.legendContactOneNameAndEmail &&
+            //        legendData.legalNameOfOtherPartyToContractTwo &&
+            //        legendData.legendAddressOfOtherPartyToContractTwo &&
+            //        legendData.legendContactOneNameAndEmailToContractTwo &&
+            //        legendData.isThisRelatetoExistAgr &&
+            //        legendData.isConfidentialityAgreement && 
+            //        legendData.isSanctionsCheck &&
+            //        legendData.istypeOfContract && 
+            //       legendData.isIfAny && 
+            //       legendData.isAutomaticRenewal && 
+            //       legendData.isContractAmount &&
+            //       legendData.isHourlyRate &&
+            //       legendData.isMaxHours &&
+            //       legendData.unitApprover &&
+            //       legendData.unitRep &&
+            //       legendData.isProRep &&
+            //       legendData.supplyServiceContract &&
+            //       legendData.specificMaterial &&
+            //       legendData.PurposeTrans &&
+            //       legendData.legendConfInfo &&
+            //       legendData.otherConfInfo &&
+            //       legendData.isConfidentiality &&
+            //       legendData.legendConfidentialInfo &&
+            //       legendData.otherPartyConf &&
+            //       legendData.isCollect &&
+            //       legendData.personalDataType) {
+             const newLegendData = { ...legendData, id: new Date().getTime().toString(), enteredDate: startDate, expectedStartDate: exStartDate, expectedEndtDate : exEndDate };
              setLegendDetails([...legendDetails, newLegendData]);
              setLegendData({ 
                    isProcurementInvolvement: '', 
@@ -64,10 +106,32 @@ const  HomePage = () => {
                    legendAddressOfOtherPartyToContractTwo:'',
                    legendContactOneNameAndEmailToContractTwo:'',
                    isThisRelatetoExistAgr:'',
-                   isConfidentialityAgreement:''
+                   isConfidentialityAgreement:'',
+                   isSanctionsCheck:'',
+                   istypeOfContract:'',
+                   isIfAny:'',
+                   isAutomaticRenewal:'',
+                   isContractAmount:'',
+                   isHourlyRate:'',
+                   isMaxHours:'',
+                   unitApprover:'',
+                   unitRep:'',
+                   isProRep: '',
+                   supplyServiceContract:'',
+                   specificMaterial:'',
+                   PurposeTrans: '',
+                   legendConfInfo: '',
+                   otherConfInfo: '',
+                   isConfidentiality:'',
+                   legendConfidentialInfo:'',
+                   otherPartyConf: '',
+                   isCollect: '',
+                   personalDataType:''
                   });
              
-      }
+      //  }else{
+      //        alert("Fill all the fields!")
+      //  }
       console.log(legendData);
       console.log(legendDetails); 
       console.log(startDate);
@@ -95,15 +159,18 @@ const  HomePage = () => {
                 
                  <div className="form-flex" onChange={handleChange}>
                         <label><b>Procurement</b></label>
+                        <br />
                         <label><b>Is Procurement Involvement Required?</b></label>
                         <label><input 
                                     type="radio" 
                                     value="Yes" 
                                     id="isProcurementInvolvement"  
+                                    checked={legendData.isProcurementInvolvement === "Yes"}
                                     name="isProcurementInvolvement" /> Yes </label>
                         <label><input 
                                     type="radio" 
-                                    value="No" 
+                                    value="No"
+                                    checked={legendData.isProcurementInvolvement === "No"}
                                     id="isProcurementInvolvement"  
                                     name="isProcurementInvolvement" /> No </label>
                         <br />
@@ -114,12 +181,14 @@ const  HomePage = () => {
                         <label><input 
                                     type="radio" 
                                     value="Yes" 
-                                    id="isProcurementDiligence"  
+                                    id="isProcurementDiligence"
+                                    checked={legendData.isProcurementDiligence === "Yes"} 
                                     name="isProcurementDiligence" /> Yes</label>
                         <label><input 
                                     type="radio" 
                                     value="No" 
-                                    id="isProcurementDiligence" 
+                                    id="isProcurementDiligence"
+                                    checked={legendData.isProcurementDiligence === "No"}  
                                     name="isProcurementDiligence" /> No</label>
                         <br />
                  </div> 
@@ -135,12 +204,14 @@ const  HomePage = () => {
                         <label><input 
                                     type="radio" 
                                     value="Legal Department reviews contract provided other party"
-                                    name="isRequestLegalDepartment"  
+                                    name="isRequestLegalDepartment" 
+                                    checked={legendData.isRequestLegalDepartment === "Legal Department reviews contract provided other party"} 
                                     id="isRequestLegalDepartment"/>Legal Department reviews contract provided other party(ies)*</label>
                         <label><input 
                                     type="radio" 
                                     value="Legal Department prepares a contracts" 
                                     name="isRequestLegalDepartment"
+                                    checked={legendData.isRequestLegalDepartment === "Legal Department prepares a contracts"}
                                     id="isRequestLegalDepartment" />Legal Department prepares a contracts</label>
                         <p>
                               <b>*Note: for Confidentiality Agreements and Services Agreement, preference is to use Legend Biotech forms.</b>
@@ -153,17 +224,20 @@ const  HomePage = () => {
                         <label><input 
                                     type="radio" 
                                     value="Yes, Capital Appropriation Request destination" 
-                                    name="isCapitalAppropriationRequest" 
+                                    name="isCapitalAppropriationRequest"
+                                    checked={legendData.isCapitalAppropriationRequest === "Yes, Capital Appropriation Request destination"}
                                     id="isCapitalAppropriationRequest" />Yes, Capital Appropriation Request destination</label>
                        <label><input 
                                     type="radio" 
-                                     value="Yes, Capital Appropriation Request approval in process" 
-                                     name="isCapitalAppropriationRequest" 
-                                     id="isCapitalAppropriationRequest" />Yes, Capital Appropriation Request approval in process</label> 
+                                    value="Yes, Capital Appropriation Request approval in process" 
+                                    name="isCapitalAppropriationRequest" 
+                                    checked={legendData.isCapitalAppropriationRequest === "Yes, Capital Appropriation Request approval in process"}
+                                    id="isCapitalAppropriationRequest" />Yes, Capital Appropriation Request approval in process</label> 
                         <label><input 
                                     type="radio" 
-                                    value="no" 
+                                    value="No" 
                                     name="isCapitalAppropriationRequest" 
+                                    checked={legendData.isCapitalAppropriationRequest === "No"}
                                     id="isCapitalAppropriationRequest" />No</label>
                         <p>
                               <b>*Note: if a Capital Appropriation Request related expenditure, Capital
@@ -284,17 +358,20 @@ const  HomePage = () => {
                                           type="radio" 
                                           value="Yes" 
                                           name="isConfidentialityAgreement" 
+                                          checked={legendData.isConfidentialityAgreement === "Yes"}
                                           id="isConfidentialityAgreement"/>Yes</label>
                               <label><input 
                                           type="radio" 
                                           value="No" 
                                           name="isConfidentialityAgreement"
-                                          id="isConfidentialityAgreement"  
+                                          id="isConfidentialityAgreement" 
+                                          checked={legendData.isConfidentialityAgreement === "No"} 
                                           />No</label>
                               <label><input 
                                           type="radio" 
                                           value="Unknown" 
                                           name="isConfidentialityAgreement"
+                                          checked={legendData.isConfidentialityAgreement === "Unknown"} 
                                           id="isConfidentialityAgreement"  />Unknown</label>
                   </div>
                 
@@ -304,11 +381,13 @@ const  HomePage = () => {
                                                 type="radio" 
                                                 value="Yes" 
                                                 name="isSanctionsCheck"
+                                                checked={legendData.isSanctionsCheck === "Yes"} 
                                                 id="isSanctionsCheck" />Yes</label>
                                     <label><input 
                                                 type="radio" 
                                                 value="No" 
                                                 name="isSanctionsCheck"
+                                                checked={legendData.isSanctionsCheck === "No"} 
                                                 id="isSanctionsCheck" />No</label> 
                  </div>
                  
@@ -321,47 +400,138 @@ const  HomePage = () => {
                
                   <div  className="form-flex">
                         <label ><b>Expected Start Date of Contract </b></label> 
-                        <input type="text" placeholder="Please type here" name="uname" />  
+                         <DatePicker 
+                              selected={exStartDate} 
+                              onChange={(date) => setExStartDate(date)} /> 
                   </div>
                 
                 <div className="form-flex">
                       <label><b>Expected End Date of Contract</b></label>
-                      <input type="text" placeholder="Expected End Date of Contract" name="expectedDate" />
+                       <DatePicker 
+                              selected={exEndDate} 
+                              onChange={(date) => setExEndDate(date)} />
                 </div>
                
-                <div className="form-flex">
+                <div className="form-flex" onChange={handleChange}>
                     <label><b> Type of Contract </b></label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Confidentiality Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Supply Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Services Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Material Transfer Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Collaboration Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> SOW or Work Order under Master Services Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> HCP Consulting Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Non-HCP Consulting Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Software License Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Quality Agreement </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Amendment/Extension to any of the foregoing (if so, provide existing agreement) </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Termination to any of the foregoing (if so, provide existing agreement) </label>
-                    <label><input type="checkbox"  name="typeOfContract" /> Other </label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="Confidentiality Agreement" 
+                              checked={legendData.istypeOfContract === "Confidentiality Agreement"}
+                              id="istypeOfContract"/>Confidentiality Agreement</label>                  
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="Supply Agreement"
+                              checked={legendData.istypeOfContract === "Supply Agreement"}
+                              id="istypeOfContract"/>Supply Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="Services Agreement"
+                              checked={legendData.istypeOfContract === "Services Agreement"}
+                              id="istypeOfContract"/>Services Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract"
+                              value="Material Transfer Agreement"
+                              checked={legendData.istypeOfContract === "Material Transfer Agreement"}
+                              id="istypeOfContract" />Material Transfer Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract"
+                              value="Collaboration Agreement"
+                              checked={legendData.istypeOfContract === "Collaboration Agreement"}
+                              id="istypeOfContract" />Collaboration Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="SOW or Work Order under Master Services Agreement"
+                              checked={legendData.istypeOfContract === "SOW or Work Order under Master Services Agreement"}
+                              id="istypeOfContract"/>SOW or Work Order under Master Services Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="HCP Consulting Agreement"
+                              checked={legendData.istypeOfContract === "HCP Consulting Agreement"}
+                              id="istypeOfContract"/>HCP Consulting Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract"
+                              value="Non-HCP Consulting Agreement"
+                              checked={legendData.istypeOfContract === "Non-HCP Consulting Agreement"}
+                              id="istypeOfContract" />Non-HCP Consulting Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="Software License Agreement"
+                              checked={legendData.istypeOfContract === "Software License Agreement"}
+                              id="istypeOfContract"/>Software License Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract"
+                              value="Quality Agreement"
+                              checked={legendData.istypeOfContract === "Quality Agreement"} 
+                              id="istypeOfContract" />Quality Agreement</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract"
+                              value="Amendment/Extension to any of the foregoing (if so, provide existing agreement)"
+                              checked={legendData.istypeOfContract === "Amendment/Extension to any of the foregoing (if so, provide existing agreement)"}
+                              id="istypeOfContract" />Amendment/Extension to any of the foregoing (if so, provide existing agreement)</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract"
+                              value="Termination to any of the foregoing (if so, provide existing agreement)"
+                              checked={legendData.istypeOfContract === "Termination to any of the foregoing (if so, provide existing agreement)"} 
+                              id="istypeOfContract"/>Termination to any of the foregoing (if so, provide existing agreement)</label>
+                    <label><input 
+                              type="radio"  
+                              name="istypeOfContract" 
+                              value="Other"
+                              checked={legendData.istypeOfContract === "Other"}
+                              id="istypeOfContract"/>Other</label>
                     <br />
                 </div>
               
                 <div className="form-flex">
                       <label><b>If Other is selected above, please indicate contract type.</b></label>
-                      <input type="text" placeholder="If Other is selected above, please indicate contract type." name="ifOther" />
+                      <input 
+                              type="text" 
+                              placeholder="If Other is selected above, please indicate contract type." 
+                              name="isIfAny"
+                              id="isIfAny"
+                              value={legendData.isIfAny} 
+                              onChange={handleChange} />
                 </div>
                 
-                <div className="form-flex">
+                <div className="form-flex"  onChange={handleChange}>
                       <label><b>Contract renewed automatically (evergreen) or upon mutual agreement?</b></label>
-                      <label><input type="radio"  name="remember" />Automatic renewal</label>
-                      <label><input type="radio"  name="remember" />Mutual agreement </label>
+                      <label><input 
+                                    type="radio"  
+                                    name="isAutomaticRenewal"
+                                    id="isAutomaticRenewal"
+                                    value="Automatic renewal" 
+                                    checked={legendData.isAutomaticRenewal === "Automatic renewal"}/>Automatic renewal</label>
+                      <label><input  
+                                    type="radio"  
+                                    name="isAutomaticRenewal"
+                                    id="isAutomaticRenewal"
+                                    value="Mutual agreement" 
+                                    checked={legendData.isAutomaticRenewal === "Mutual agreement"} />Mutual agreement</label>
                       <br />
                 </div>
 
                 <div className="form-flex">
                       <label><b>Total Contract Dollar Amount</b></label>
-                      <input type="text" placeholder="Total Contract Dollar Amount" name="totalContract" />
+                      <input 
+                              type="text" 
+                              placeholder="Total Contract Dollar Amount" 
+                              name="isContractAmount"
+                              id="isContractAmount"
+                              value={legendData.isContractAmount}
+                              onChange={handleChange} />
                 </div>
                 
                 <div className="form-flex">
@@ -369,15 +539,33 @@ const  HomePage = () => {
                         <label><h3>For HCP Contracts Only</h3></label>
                       </div>
                       <label><b>Hourly Rate</b></label>
-                      <input type="text" placeholder="Hourly Rate" name="hourlyRate" />
+                      <input 
+                              type="text" 
+                              placeholder="Hourly Rate" 
+                              name="isHourlyRate"
+                              id="isHourlyRate"
+                              value={legendData.isHourlyRate}
+                              onChange={handleChange}/>
                       <label><b>Maximum Number of Hours</b></label>
-                      <input type="text" placeholder="Maximum Number of Hours" name="maxHours" />
+                      <input 
+                              type="text" 
+                              placeholder="Maximum Number of Hours" 
+                              name="isMaxHours"
+                              id="isMaxHours"
+                              value={legendData.isMaxHours}
+                              onChange={handleChange}  />
                 </div>
                 
 
                 <div className="form-flex">
                     <label><b>Business Unit Approver</b></label>
-                    <input type="text" placeholder="Business Unit Approver" name="unitApprover" />
+                    <input 
+                        type="text" 
+                        placeholder="Business Unit Approver" 
+                        name="unitApprover" 
+                        id="unitApprover"
+                        value={legendData.unitApprover}
+                        onChange={handleChange} />
                 </div>
                 
                 <div className="form-flex">
@@ -389,24 +577,48 @@ const  HomePage = () => {
 
                 <div className="form-flex">
                       <label><b>Business Unit Representative</b></label>
-                      <input type="text" placeholder="Business Unit Representative" name="unitRep" />
+                      <input 
+                              type="text" 
+                              placeholder="Business Unit Representative" 
+                              name="unitRep"
+                              id="unitRep"
+                              value={legendData.unitRep}
+                              onChange={handleChange} />
                 </div>
                 
                 <div className="form-flex">
                       <label><b>Procurement Representative (if applicable)</b></label>
-                      <input type="text" placeholder="Procurement Representative (if applicable)" name="proRep" />
+                      <input 
+                              type="text" 
+                              placeholder="Procurement Representative (if applicable)" 
+                              name="isProRep" 
+                              id="isProRep"
+                              value={legendData.isProRep}
+                              onChange={handleChange} />
                 </div>
                 
 
 
                 <div className="form-flex">
                     <label><b>For supply or service Contracts, provide a detailed description of the purpose and scope of the Contract (including any requested amendment/extension to existing Contract), including a description of any goods or services</b></label>
-                    <input type="text" placeholder="For supply or service Contracts..." name="supplyService" />
+                    <input 
+                        type="text" 
+                        placeholder="For supply or service Contracts..." 
+                        name="supplyServiceContract" 
+                        id="supplyServiceContract"
+                        value={legendData.supplyServiceContract}
+                        onChange={handleChange} />
                 </div>
                 
                 <div className="form-flex">
                     <label><b>Describe specific materials being provided by Legend Biotech, if any. </b></label>
-                    <input type="text" placeholder="Describe specific materials being provided by Legend Biotech, if any." name="speMaterial" />
+                    <input 
+                        type="text" 
+                        placeholder="Describe specific materials being provided by Legend Biotech, if any." 
+                        name="specificMaterial"
+                        id="specificMaterial"
+                        value={legendData.specificMaterial}
+                        onChange={handleChange} />
                 </div>
 
                 
@@ -418,21 +630,51 @@ const  HomePage = () => {
                         </b>
                       </label>
                       <br />
-                      <label><b>Purpose of Transaction: </b></label>
-                      <input type="text" placeholder="Purpose of Transaction" name="purTrans"  />
+                      <label><b>Purpose of Transaction:</b></label>
+                      <input 
+                              type="text" 
+                              placeholder="Purpose of Transaction" 
+                              name="PurposeTrans"
+                              id="PurposeTrans"
+                              value={legendData.PurposeTrans}
+                              onChange={handleChange}  />
+
                       <label><b>Legend Confidential Information:  </b></label>
-                      <input type="text" placeholder="Legend Confidential Information" name="legConf"  />
+                      <input 
+                              type="text" 
+                              placeholder="Legend Confidential Information" 
+                              name="legendConfInfo" 
+                              id="legendConfInfo"
+                              value={legendData.legendConfInfo}
+                              onChange={handleChange}  />
+
                       <label><b>Other Party Confidential Information: </b></label>
-                      <input type="text" placeholder="Other Party Confidential Information" name="partyConf"  />
+                      <input 
+                              type="text" 
+                              placeholder="Other Party Confidential Information" 
+                              name="otherConfInfo" 
+                              id="otherConfInfo"
+                              value={legendData.otherConfInfo}
+                              onChange={handleChange} />
                 </div>
 
-                  <div className="form-flex">
+                  <div className="form-flex" onChange={handleChange}>
                         <label>
                           <b> For all agreements other than Confidentiality Agreements: Is any confidential       information being shared, including employee information, proprietary information and other non-public information? 
                           </b>
                         </label>
-                        <label><input type="radio"  name="confidentiality" /> Yes </label>
-                        <label><input type="radio"  name="confidentiality" /> No </label>
+                        <label><input 
+                                    type="radio"   
+                                    name="isConfidentiality" 
+                                    id="isConfidentiality"
+                                    checked={legendData.isConfidentiality === "Yes"} 
+                                    value="Yes" />Yes</label>
+                        <label><input 
+                                    type="radio"   
+                                    name="isConfidentiality" 
+                                    id="isConfidentiality"
+                                    checked={legendData.isConfidentiality === "No"} 
+                                    value="No" />No</label>
                         <br />
                   </div>
 
@@ -442,24 +684,52 @@ const  HomePage = () => {
                         </b>
                       </label>
                       <label><b>Legend Confidential Information: </b></label>
-                      <input type="text" placeholder="Legend Confidential Information" name="legendConf"  />
+                      <input 
+                              type="text" 
+                              placeholder="Legend Confidential Information" 
+                              name="legendConfidentialInfo"
+                              id="legendConfidentialInfo"
+                              value={legendData.legendConfidentialInfo}
+                              onChange={handleChange}  />
                       <label><b>Other Party Confidential Information:  </b></label>
-                      <input type="text" placeholder="Other Party Confidential Information" name="otherPartyConf"  />
+                      <input 
+                              type="text" 
+                              placeholder="Other Party Confidential Information" 
+                              name="otherPartyConf" 
+                              id="otherPartyConf"
+                              value={legendData.otherPartyConf}
+                              onChange={handleChange}  />
                   </div>
 
-                 <div className="form-flex">
+                 <div className="form-flex" onChange={handleChange}>
                         <label>
                           <b> Do the other party(ies), collect, record, store, use, view, disclose or transmit (i.e. process) any personal data (for example, employee name, patient names, email, ID, customer names etc.) on behalf of Legend Biotech? 
                           </b>
                         </label>
-                        <label><input type="radio"  name="collect" /> Yes </label>
-                        <label><input type="radio"  name="collect" /> No </label>
+                        <label><input 
+                                    type="radio"  
+                                    name="isCollect" 
+                                    id="isCollect"
+                                    value="Yes"
+                                    checked={legendData.isCollect === "Yes"}/>Yes</label>
+                        <label><input 
+                                    type="radio"  
+                                    name="isCollect" 
+                                    id="isCollect"
+                                    value="No"
+                                    checked={legendData.isCollect === "No"} /> No </label>
                         <br />
                   </div>
 
                   <div className="form-flex">
                       <label><b>If yes, what type of personal data will be shared.</b></label>
-                      <input type="text" placeholder="If yes, what type of personal data will be shared." name="personal data"  />
+                      <input 
+                              type="text" 
+                              placeholder="If yes, what type of personal data will be shared." 
+                              name="personalDataType" 
+                              id="personalDataType"
+                              value={legendData.personalDataType}
+                              onChange={handleChange}  />
                   </div> 
 
                   <div className="form-flex-btn">
@@ -469,16 +739,6 @@ const  HomePage = () => {
             </div>
         </form>
         </article>
-        <article>
-        {legendDetails.map((data)=>{
-                 return (
-                <div key={data.id}>
-                <h4>{data.isProcurementDiligence}</h4>
-                <h4>{data.isProcurementInvolvement}</h4>
-                </div>
-                )
-                })}
-      </article>
     </>
   )
 }

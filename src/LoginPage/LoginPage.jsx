@@ -45,16 +45,6 @@ function LoginPage() {
                     <button type="submit" onClick={handleSubmit}>Login</button>    
                 </div>
             </form>
-             <article>
-            {loginDetails.map((data)=>{
-                 return (
-                <div>
-                <h4>{data.uname}</h4>
-                <h4>{data.psw}</h4>
-                </div>
-                )
-                })}
-            </article>
       </>
   );
 }

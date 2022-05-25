@@ -15,7 +15,7 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (registerData.email && registerData.psw && registerData.pswrepeat) {
+    if (registerData.email && registerData.psw && registerData.pswrepeat && (registerData.psw === registerData.pswrepeat)) {
       const newPerson = { ...registerData, id: new Date().getTime().toString() };
       setRegisterDetails([...registerDetails, newPerson]);
       setRegisterData({ email: '', psw: '', pswrepeat: '' });
@@ -56,11 +56,7 @@ const RegisterPage = () => {
      <article>
        {registerDetails.map((data)=>{
          return (
-         <div>
-           <h4>{data.email}</h4>
-           <h4>{data.psw}</h4>
-           <h4>{data.pswrepeat}</h4>
-         </div>
+         alert("Registration Successfully")
          )
        })}
      </article>
