@@ -123,7 +123,7 @@ const  HomePage = () => {
             //       legendData.otherPartyConf &&
             //       legendData.isCollect &&
             //       legendData.personalDataType) {
-             const newLegendData = { ...legendData, id: new Date().getTime().toString(), enteredDate: startDate, expectedStartDate: exStartDate, expectedEndtDate : exEndDate };
+             const newLegendData = { ...legendData, id: new Date().getTime().toString(), enteredDate: startDate, expectedStartDate: exStartDate, expectedEndtDate : exEndDate, attachedFile: selectedFile };
              setLegendDetails([...legendDetails, newLegendData]);
              setLegendData({ 
                    isProcurementInvolvement: '', 
@@ -161,7 +161,6 @@ const  HomePage = () => {
                    isCollect: '',
                    personalDataType:''
                   });
-                  nav('/success');
              
       //  }else{
       //        alert("Fill all the fields!")
@@ -216,7 +215,8 @@ const  HomePage = () => {
                   nonConfidentialLegendInfo : legendData.legendConfidentialInfo,
                   nonConfidentialOtherPartyInfo : legendData.otherPartyConf,
                   isOtherPartyCollectInfo : legendData.isCollect,
-                  otherPartySharedData : legendData.personalDataType
+                  otherPartySharedData : legendData.personalDataType,
+                  attachments : selectedFile
 
               })
         });
@@ -829,8 +829,9 @@ const  HomePage = () => {
                               onChange={handleChange}  />
                   </div> 
                   <div className="form-flex">
-                        <label></label>
-                        <input type="file" name="file" onChange={changeHandler} />
+                        <label><b>Please upload a standard document</b></label>
+                        <br />
+                        <input type="file" name="file" accept=".pdf, image/png, image/jpeg " onChange={changeHandler} />
                         {isFilePicked ? (
 				<div>
 					<p>Filename: {selectedFile.name}</p>
