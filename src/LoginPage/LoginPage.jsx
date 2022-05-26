@@ -30,10 +30,34 @@ function LoginPage() {
     nav("/");
   };
 
+   const PostData =  async (e) => {
+        e.preventDefault();
+
+        const res = await fetch("http://localhost:3000/api/vi/users", {
+              method: "POST",
+              headers:{
+                    "Content-Type" : "application/json"
+              },
+              body: JSON.stringify({
+                userName : loginData.uname,
+                password : loginData.psw
+               })
+            });
+        const data = await res.json();
+
+        if(data.status === 500 || !data){
+              window.alert("Invalid Login");
+              console.log("Invalid Login");
+        }else{
+              window.alert("Login Successful");
+              console.log("Login Successful");
+        }
+      };
+
     
   return (
       <>
-           <form className='form-control'>
+           <form className='form-control' method="GET">
                <div className="container">
                    <div className="form-login">
                          <h1>Login Form</h1>
@@ -48,7 +72,7 @@ function LoginPage() {
                         <label htmlFor="psw"><b>Password:</b></label>
                         <input type="password" placeholder="Enter Password" name="psw" value={loginData.psw} onChange={handleChange} required />
                     </div>               
-                    <button type="submit" onClick={handleSubmit}>Login</button>    
+                    <button type="submit" onClick={PostData}>Login</button>    
                 </div>
             </form>
       </>

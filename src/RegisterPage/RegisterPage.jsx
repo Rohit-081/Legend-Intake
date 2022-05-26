@@ -26,6 +26,31 @@ const RegisterPage = () => {
     nav("/login");
   };
 
+   const PostData =  async (e) => {
+        e.preventDefault();
+
+        const res = await fetch("http://localhost:3000/api/vi/users", {
+              method: "POST",
+              headers:{
+                    "Content-Type" : "application/json"
+              },
+              body: JSON.stringify({
+                userName : registerData.username,
+                email: registerData.email,
+                password : registerData.psw
+               })
+            });
+        const data = await res.json();
+
+        if(data.status === 422 || !data){
+              window.alert("Invalid Registration");
+              console.log("Invalid Registration");
+        }else{
+              window.alert("Registration Successful");
+              console.log("Registration Successful");
+        }
+      };
+
   return (
      <>
      <article>
@@ -52,7 +77,7 @@ const RegisterPage = () => {
                       
                       
                     
-                      <button type="submit" className="registerbtn" onClick={handleSubmit}>Register</button>
+                      <button type="submit" className="registerbtn" onClick={PostData}>Register</button>
                       
               </div>    
      </form>

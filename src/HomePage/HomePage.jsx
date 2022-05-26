@@ -2,18 +2,18 @@ import React,{useState} from 'react'
 import './App.css'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useNavigate } from "react-router-dom";
 import  logo  from '../assets/images/LegendBiotech.jpg';
 
 const  HomePage = () => {
-      const nav = useNavigate();
       const [startDate, setStartDate] = useState(new Date());
       const [exStartDate, setExStartDate] = useState(new Date());
       const [exEndDate, setExEndDate] = useState(new Date());
 
-      const [selectedFile, setSelectedFile] = useState();
+      const [selectedFile, setSelectedFile] = useState([]);
 	const [isFilePicked, setIsFilePicked] = useState(false);
-      
+      const [legendDetails, setLegendDetails] = useState([]);
+
+
       const [legendData, setLegendData] = useState({
             isProcurementInvolvement: "",
             isProcurementDiligence:"",
@@ -48,12 +48,11 @@ const  HomePage = () => {
             legendConfidentialInfo:'',
             otherPartyConf:'',
             isCollect:'',
-            personalDataType:''
+            personalDataType:'',
+            formStatus: ""
             
       })
-      const[legendDetails, setLegendDetails] = useState([]);
-
-
+      
       const handleChange = (e) => {
             console.log(e.target.value);
             const name = e.target.name;
@@ -68,9 +67,9 @@ const  HomePage = () => {
 
       const handleSubmission = () => {
 		const formData = new FormData();
-		formData.append('File', selectedFile);
+		formData.append('attachments', selectedFile, selectedFile.name);
 		fetch(
-			'https://freeimage.host/api/1/upload?key=<YOUR_API_KEY>',
+			'http://localhost:3000/api/vi/forms',
 			{
 				method: 'POST',
 				body: formData,
@@ -173,7 +172,7 @@ const  HomePage = () => {
   const PostData =  async (e) => {
         e.preventDefault();
 
-        const res = fetch("/register", {
+        const res = await fetch("http://localhost:3000/api/vi/forms", {
               method: "POST",
               headers:{
                     "Content-Type" : "application/json"
@@ -216,17 +215,20 @@ const  HomePage = () => {
                   nonConfidentialOtherPartyInfo : legendData.otherPartyConf,
                   isOtherPartyCollectInfo : legendData.isCollect,
                   otherPartySharedData : legendData.personalDataType,
-                  attachments : selectedFile
+                  attachments : selectedFile,
+                  formStatus: "Saved"
 
               })
         });
         const data = await res.json({});
-        if(data.status === 422 || !data){
-              window.alert("Invalid Registration");
-              console.log("Invalid Registration");
+        if(data.status === 200|| !data){
+              window.alert("Home Details Successful");
+              console.log("Home Details Successful");
+             
         }else{
-              window.alert("Registration Successful");
-              console.log("Registration Successful");
+               window.alert("Invalid Home Details");
+              console.log("Invalid Home Details");
+              
         }
   }
 
@@ -625,7 +627,7 @@ const  HomePage = () => {
                 <div className="form-flex">
                       <label><b>Total Contract Dollar Amount</b></label>
                       <input 
-                              type="text" 
+                              type="number" 
                               placeholder="Total Contract Dollar Amount" 
                               name="isContractAmount"
                               id="isContractAmount"
@@ -637,7 +639,7 @@ const  HomePage = () => {
                       <label className="form-section"><b>For HCP Contracts Only</b></label>
                       <label><b>Hourly Rate</b></label>
                       <input 
-                              type="text" 
+                              type="number" 
                               placeholder="Hourly Rate" 
                               name="isHourlyRate"
                               id="isHourlyRate"
@@ -645,7 +647,7 @@ const  HomePage = () => {
                               onChange={handleChange}/>
                       <label><b>Maximum Number of Hours</b></label>
                       <input 
-                              type="text" 
+                              type="number" 
                               placeholder="Maximum Number of Hours" 
                               name="isMaxHours"
                               id="isMaxHours"
@@ -829,26 +831,38 @@ const  HomePage = () => {
                               onChange={handleChange}  />
                   </div> 
                   <div className="form-flex">
-                        <label><b>Please upload a standard document</b></label>
-                        <br />
-                        <input type="file" name="file" accept=".pdf, image/png, image/jpeg " onChange={changeHandler} />
-                        {isFilePicked ? (
-				<div>
-					<p>Filename: {selectedFile.name}</p>
-					<p>Filetype: {selectedFile.type}</p>
-					<p>Size in bytes: {selectedFile.size}</p>
-					<p>
-						lastModifiedDate:{' '}
-						{selectedFile.lastModifiedDate.toLocaleDateString()}
-					</p>
-				</div>
-			) : ( ""
-			)}
+                        <div className="form-docs">
+                              <div>
+                                    <label><b>Please upload a standard document</b></label>
+                                     <br />
+                                                                        <input type="file" name="file" accept=".pdf, image/png, image/jpeg " onChange={changeHandler} />
+                                                                        {isFilePicked ? (
+                                                                        <div>
+                                                                              <p>Filename: {selectedFile.name}</p>
+                                                                              <p>Filetype: {selectedFile.type}</p>
+                                                                              <p>Size in bytes: {selectedFile.size}</p>
+                                                                              <p>
+                                                                                    lastModifiedDate:{' '}
+                                                                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
+                                                                              </p>
+                                                                              
+                                                                        </div>
+                                                                  ) : ( ""
+                                                                  )}
+                              </div>
+                              
+                              <div>
+                                    <button className="form-docs-btn" type="submit" onClick={handleSubmission}>Upload</button>
+                              </div>
+                              
+
+                        </div>
+                        
                   </div>
 
                   <div className="form-flex-btn">
-                        <button type="submit" onClick={handleSubmission}>Save</button>
-                        <button type='submit' onClick={handleSubmit}>Submit</button>
+                        <button type="submit">Save</button>
+                        <button type='submit' onClick={PostData}>Submit</button>
                   </div>
             </div>
         </form>
