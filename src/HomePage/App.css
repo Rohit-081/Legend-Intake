@@ -8,6 +8,7 @@
   display: inline-block;
   border: none;
   background: #f1f1f1;
+  border-radius: 5px;
 }
 
 input[type=text]:focus, input[type=password]:focus {
@@ -51,7 +52,7 @@ button:hover {
 /* Add padding to container elements */
 .container {
   padding: 16px;
-  width: 50%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -88,4 +89,37 @@ button:hover {
   .cancelbtn, .signupbtn {
     width: 100%;
   }
+}
+
+.form-intake {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-intake p{
+  background-color: #ddd;
+  padding: 20px;
+  border: #ddd;
+  border-radius: 15px;
+}
+
+.form-note{
+  background-color: #ddd;
+  padding: 10px;
+  border: #ddd;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+
+.form-section{
+  display: flex;
+  justify-content: center;
+  background-color: #ddd;
+  padding: 10px;
+  border: #ddd;
+  border-radius: 10px;
+  margin: 10px 0;
+
 }

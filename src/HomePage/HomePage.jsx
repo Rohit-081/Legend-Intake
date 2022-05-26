@@ -3,6 +3,7 @@ import './App.css'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import  logo  from '../assets/images/LegendBiotech.jpg';
 
 const  HomePage = () => {
       const nav = useNavigate();
@@ -235,6 +236,10 @@ const  HomePage = () => {
         <form className="form" method="POST">
             <div className="container">
                  <div className="form-intake">
+                       <img src={logo} height={200}
+                              width={400}
+                              alt=""
+                              className="logo-img" />
                         <h1>LEGAL CONTRACT INTAKE FORM</h1>
                         <p><b>Please complete and email this form to LegalContracts@LegendBiotech.com and include any relevant attachments (such as
                         previous agreements, proposed slides, proposed contracts and SOWs, and a description of the proposed terms of business, if
@@ -246,11 +251,10 @@ const  HomePage = () => {
                          <DatePicker 
                               selected={startDate} 
                               onChange={(date) => setStartDate(date)} />
-                        <br />
                  </div>
                 
                  <div className="form-flex" onChange={handleChange}>
-                        <label><b>Procurement</b></label>
+                        <label className="form-section"><b>Procurement</b></label>
                         <br />
                         <label><b>Is Procurement Involvement Required?</b></label>
                         <label><input 
@@ -284,11 +288,10 @@ const  HomePage = () => {
                                     name="isProcurementDiligence" /> No</label>
                         <br />
                  </div> 
-                 <div  className="form-flex">
+                 <div  className="form-flex form-note">
                         <p>
                               <b>Note: If you answered “No” to the question above and Procurement Diligence is required, please do not submit this form until Procurement Diligence is substantially completed.</b>
                         </p>
-                        <br />
                 </div>
                 
                 <div  className="form-flex" onChange={handleChange}>
@@ -305,13 +308,16 @@ const  HomePage = () => {
                                     name="isRequestLegalDepartment"
                                     checked={legendData.isRequestLegalDepartment === "Legal Department prepares a contracts"}
                                     id="isRequestLegalDepartment" />Legal Department prepares a contracts</label>
-                        <p>
-                              <b>*Note: for Confidentiality Agreements and Services Agreement, preference is to use Legend Biotech forms.</b>
-                        </p>   
+                        <div className="form-note">
+                              <p>
+                                    <b>*Note: for Confidentiality Agreements and Services Agreement, preference is to use Legend Biotech forms.</b>
+                              </p> 
+                        </div>
+                          
                  </div>
             
                   <div  className="form-flex"  onChange={handleChange}>
-                        <label><b>Capital Appropriation Request (CAR) Process</b></label>
+                        <label className="form-section"><b>Capital Appropriation Request (CAR) Process</b></label>
                         <label><b>Is this a Capital Appropriation Request(CAR) related expenditure?</b></label>
                         <label><input 
                                     type="radio" 
@@ -331,16 +337,17 @@ const  HomePage = () => {
                                     name="isCapitalAppropriationRequest" 
                                     checked={legendData.isCapitalAppropriationRequest === "No"}
                                     id="isCapitalAppropriationRequest" />No</label>
+                        <div className="form-note">
                         <p>
                               <b>*Note: if a Capital Appropriation Request related expenditure, Capital
                               Appropriation Request approval must be in-place before contract execution.</b>
                         </p>
+                        </div>
                               
                   </div>
 
                   <div className="form-flex">
-                        <label><b>General</b></label>
-                        <br />
+                        <label className="form-section"><b>General</b></label>
                   </div>            
               
                
@@ -483,7 +490,7 @@ const  HomePage = () => {
                                                 id="isSanctionsCheck" />No</label> 
                  </div>
                  
-                  <div className="form-flex">
+                  <div className="form-flex form-note">
                                     <p><b>Note: A Sanctions Check is required for all contracts, except for CDA requests. Procurement is responsible for performing a
                                     Sanctions Check on all contracting parties, including for contracts that do not otherwise require Procurement involvement. For
                                     contracts that do not require Procurement involvement, the name of the other contracting party(ies) should be sent to
@@ -627,9 +634,7 @@ const  HomePage = () => {
                 </div>
                 
                 <div className="form-flex">
-                      <div className="form-note">
-                        <label><h3>For HCP Contracts Only</h3></label>
-                      </div>
+                      <label className="form-section"><b>For HCP Contracts Only</b></label>
                       <label><b>Hourly Rate</b></label>
                       <input 
                               type="text" 
