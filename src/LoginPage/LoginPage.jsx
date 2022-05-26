@@ -23,10 +23,11 @@ function LoginPage() {
       const newPerson = { ...loginData, id: new Date().getTime().toString() };
       setLoginDetails([...loginDetails, newPerson]);
       setLoginData({ uname: '', psw: ''});
-      nav("/");
+      
     }
     console.log(loginData);
     console.log(loginDetails)
+    nav("/");
   };
 
     

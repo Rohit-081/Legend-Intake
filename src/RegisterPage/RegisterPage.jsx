@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
-  const [registerData, setRegisterData] = useState({ email: '', psw: '', pswrepeat: '' });
+  const [registerData, setRegisterData] = useState({ username:'', email: '', psw: ''});
   const [registerDetails, setRegisterDetails] = useState([]);
   const nav = useNavigate();
   const handleChange = (e) => {
@@ -16,14 +16,14 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (registerData.email && registerData.psw && registerData.pswrepeat && (registerData.psw === registerData.pswrepeat)) {
+    if (registerData.email && registerData.psw && registerData.username) {
       const newPerson = { ...registerData, id: new Date().getTime().toString() };
       setRegisterDetails([...registerDetails, newPerson]);
-      setRegisterData({ email: '', psw: '', pswrepeat: '' });
-      nav("/login");
+      setRegisterData({ email: '', psw: '', username:'' });
     }
     console.log(registerData);
     console.log(registerDetails);
+    nav("/login");
   };
 
   return (
@@ -34,6 +34,11 @@ const RegisterPage = () => {
                     <div className="form-register">
                         <h1>Create Your Legend Account</h1>
                     </div>
+
+                      <div className="form-flex">
+                          <label htmlFor="username"><b>Enter Username:</b></label>
+                          <input type="text" placeholder="Enter Username" name="username" value={registerData.username} onChange={handleChange} id="username" required />
+                      </div>
                       
                       <div className="form-flex">
                           <label htmlFor="email"><b>Email:</b></label>
@@ -45,10 +50,7 @@ const RegisterPage = () => {
                           <input type="password" placeholder="Enter Password" name="psw" value={registerData.psw} onChange={handleChange} id="psw" required />
                       </div>
                       
-                      <div className="form-flex">
-                          <label htmlFor="pswrepeat"><b>Repeat Password:</b></label>
-                          <input type="password" placeholder="Repeat Password" name="pswrepeat" value={registerData.pswrepeat} onChange={handleChange} id="pswrepeat" required />
-                      </div>
+                      
                     
                       <button type="submit" className="registerbtn" onClick={handleSubmit}>Register</button>
                       

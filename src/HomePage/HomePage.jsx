@@ -9,6 +9,10 @@ const  HomePage = () => {
       const [startDate, setStartDate] = useState(new Date());
       const [exStartDate, setExStartDate] = useState(new Date());
       const [exEndDate, setExEndDate] = useState(new Date());
+
+      const [selectedFile, setSelectedFile] = useState();
+	const [isFilePicked, setIsFilePicked] = useState(false);
+      
       const [legendData, setLegendData] = useState({
             isProcurementInvolvement: "",
             isProcurementDiligence:"",
@@ -55,6 +59,32 @@ const  HomePage = () => {
             const value = e.target.value;
             setLegendData({ ...legendData, [name]: value });
       };
+
+      const changeHandler = (event) => {
+		setSelectedFile(event.target.files[0]);
+		setIsFilePicked(true);
+	};
+
+      const handleSubmission = () => {
+		const formData = new FormData();
+		formData.append('File', selectedFile);
+		fetch(
+			'https://freeimage.host/api/1/upload?key=<YOUR_API_KEY>',
+			{
+				method: 'POST',
+				body: formData,
+			}
+		)
+			.then((response) => response.json())
+			.then((result) => {
+				console.log('Success:', result);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+	};
+
+
 
        const handleSubmit = (e) => {
             e.preventDefault();
@@ -140,10 +170,69 @@ const  HomePage = () => {
       console.log(startDate);
   };
 
+  const PostData =  async (e) => {
+        e.preventDefault();
+
+        const res = fetch("/register", {
+              method: "POST",
+              headers:{
+                    "Content-Type" : "application/json"
+              },
+              body:JSON.stringify({
+                  todaysDate : startDate,
+                  proInvoloveRequired : legendData.isProcurementInvolvement,
+                  proDiligenceCompleted : legendData.isProcurementDiligence, 
+                  request : legendData.isRequestLegalDepartment, 
+                  carExpenditure : legendData.isCapitalAppropriationRequest,
+                  legendBiotechEntity : legendData.legendBiotechContracting,
+                  submittingDepartment : legendData.legendSubmittingDepartment,
+                  contract1LegalName : legendData.legalNameOfOtherParty,
+                  contract1FullName : legendData.legendAddressOfOtherParty, 
+                  contract1NameAndEmail : legendData.legendContactOneNameAndEmail,
+                  contract2LegalName : legendData.legalNameOfOtherPartyToContractTwo,
+                  contract2FullName : legendData.legendAddressOfOtherPartyToContractTwo,
+                  contract2NameAndEmail : legendData.legendContactOneNameAndEmailToContractTwo,
+                  existingAgreement: legendData.isThisRelatetoExistAgr,
+                  confidentialityAgreement : legendData.isConfidentialityAgreement, 
+                  sanctionsCheck : legendData.isSanctionsCheck,
+                  contractStartDate: exStartDate,
+                  contractEndDate: exEndDate,
+                  contractType : legendData.istypeOfContract, 
+                  otherContractType :legendData.isIfAny,
+                  renewalOrAgreement : legendData.isAutomaticRenewal, 
+                  contractAmount : legendData.isContractAmount,
+                  hourlyRate : legendData.isHourlyRate,
+                  maxiHours : legendData.isMaxHours,
+                  businessUnitApprover : legendData.unitApprover,
+                  businessUnitRepresentative : legendData.unitRep,
+                  procurementRepresentative : legendData.isProRep,
+                  contractPurposeScope : legendData.supplyServiceContract,
+                  materialByLegend : legendData.specificMaterial,
+                  transactionPurpose : legendData.PurposeTrans,
+                  legendConfidentialInfo : legendData.legendConfInfo,
+                  otherPartyConfidentialInfo : legendData.otherConfInfo,
+                  isConfInfoShared : legendData.isConfidentiality,
+                  nonConfidentialLegendInfo : legendData.legendConfidentialInfo,
+                  nonConfidentialOtherPartyInfo : legendData.otherPartyConf,
+                  isOtherPartyCollectInfo : legendData.isCollect,
+                  otherPartySharedData : legendData.personalDataType
+
+              })
+        });
+        const data = await res.json({});
+        if(data.status === 422 || !data){
+              window.alert("Invalid Registration");
+              console.log("Invalid Registration");
+        }else{
+              window.alert("Registration Successful");
+              console.log("Registration Successful");
+        }
+  }
+
   return (
     <>
     <article>
-        <form className="form">
+        <form className="form" method="POST">
             <div className="container">
                  <div className="form-intake">
                         <h1>LEGAL CONTRACT INTAKE FORM</h1>
@@ -734,9 +823,25 @@ const  HomePage = () => {
                               value={legendData.personalDataType}
                               onChange={handleChange}  />
                   </div> 
+                  <div className="form-flex">
+                        <label></label>
+                        <input type="file" name="file" onChange={changeHandler} />
+                        {isFilePicked ? (
+				<div>
+					<p>Filename: {selectedFile.name}</p>
+					<p>Filetype: {selectedFile.type}</p>
+					<p>Size in bytes: {selectedFile.size}</p>
+					<p>
+						lastModifiedDate:{' '}
+						{selectedFile.lastModifiedDate.toLocaleDateString()}
+					</p>
+				</div>
+			) : ( ""
+			)}
+                  </div>
 
                   <div className="form-flex-btn">
-                        <button type="submit" >Save</button>
+                        <button type="submit" onClick={handleSubmission}>Save</button>
                         <button type='submit' onClick={handleSubmit}>Submit</button>
                   </div>
             </div>
