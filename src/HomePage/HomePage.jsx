@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import './App.css'
-import DatePicker from "react-datepicker";
+//import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import  logo  from '../assets/images/LegendBiotech.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -8,12 +8,14 @@ import { useNavigate } from 'react-router-dom';
 const  HomePage = () => {
       //const [startDate, setStartDate] = useState(new Date());
       //const [exStartDate, setExStartDate] = useState(new Date());
-     // const [exEndDate, setExEndDate] = useState(new Date());
-      const nav = useNavigate();
-      const [selectedFile, setSelectedFile] = useState([]);
-	const [isFilePicked, setIsFilePicked] = useState(false);
+      //const [exEndDate, setExEndDate] = useState(new Date());
       //const [legendDetails, setLegendDetails] = useState([]);
 
+      //const nav = useNavigate();
+      const [selectedFile, setSelectedFile] = useState([]);
+	const [isFilePicked, setIsFilePicked] = useState(false);
+      
+      //Login to Register Data Store
       const sessionData = JSON.parse(localStorage.getItem('UserInfo')) || [];
       console.log("UserId", sessionData.userId);
       console.log("UserName", sessionData.userName);
@@ -21,8 +23,8 @@ const  HomePage = () => {
 
       const url = `http://localhost:3000/api/vi/forms?formID=&userID=${sessionData.userId}`;
 
-
       const [legendData, setLegendData] = useState({
+            formId:'',
             startDate:'',
             isProcurementInvolvement: "",
             isProcurementDiligence:"",
@@ -59,7 +61,8 @@ const  HomePage = () => {
             legendConfidentialInfo:'',
             otherPartyConf:'',
             isCollect:'',
-            personalDataType:''
+            personalDataType:'',
+            formStatus:''
             
       })
 
@@ -69,11 +72,12 @@ const  HomePage = () => {
             console.log(response);
             const users = await response.json();
             const usersData = users.formData;
-            console.log(usersData);
+            console.log("userData",usersData);
+            console.log("FormId",usersData._id);
             console.log(users.status);
             if(users.status === 200 && usersData){
-
                   setLegendData({...legendData ,
+                        formId: usersData._id,
                         startDate: usersData.todaysDate,
                         isProcurementInvolvement: usersData.proInvoloveRequired,
                         isProcurementDiligence: usersData.proDiligenceCompleted,
@@ -111,7 +115,8 @@ const  HomePage = () => {
                         otherPartyConf : usersData.nonConfidentialOtherPartyInfo,
                         isCollect : usersData.isOtherPartyCollectInfo,
                         personalDataType : usersData.otherPartySharedData,
-                        selectedFile : usersData.attachments
+                        selectedFile : usersData.attachments,
+                        formStatus: usersData.formStatus
                   })
             }
   };
@@ -119,7 +124,7 @@ const  HomePage = () => {
 
       useEffect(()=>{      
            getUsers();
-      },[]);
+      }, []);
       
       const handleChange = (e) => {
             console.log(e.target.value);
@@ -133,7 +138,147 @@ const  HomePage = () => {
 		setIsFilePicked(true);
 	};
 
-      const handleSubmission = async (e) => {
+      const handleSave = async (e) => {
+              e.preventDefault();
+		var formData = new FormData();
+                  formData.append('todaysDate', legendData.startDate);
+                  formData.append('proInvoloveRequired' , legendData.isProcurementInvolvement);
+                  formData.append('proDiligenceCompleted', legendData.isProcurementDiligence );
+                  formData.append('request', legendData.isRequestLegalDepartment);
+                  formData.append('carExpenditure' , legendData.isCapitalAppropriationRequest);
+                  formData.append('legendBiotechEntity', legendData.legendBiotechContracting );
+                  formData.append('submittingDepartment', legendData.legendSubmittingDepartment);
+                  formData.append('contract1LegalName' ,legendData.legalNameOfOtherParty);
+                  formData.append('contract1FullName', legendData.legendAddressOfOtherParty );
+                  formData.append('contract1NameAndEmail', legendData.legendContactOneNameAndEmail);
+                  formData.append('contract2LegalName' ,  legendData.legalNameOfOtherPartyToContractTwo);
+                  formData.append('contract2FullName', legendData.legendAddressOfOtherPartyToContractTwo );
+                  formData.append('contract2NameAndEmail', legendData.legendContactOneNameAndEmailToContractTwo);
+                  formData.append('existingAgreement', legendData.isThisRelatetoExistAgr);
+                  formData.append('confidentialityAgreement', legendData.isConfidentialityAgreement); 
+                  formData.append('sanctionsCheck', legendData.isSanctionsCheck);
+                  formData.append('contractStartDate', legendData.exStartDate);
+                  formData.append('contractEndDate', legendData.exEndDate);
+                  formData.append('contractType', legendData.istypeOfContract); 
+                  formData.append('otherContractType',legendData.isIfAny);
+                  formData.append('renewalOrAgreement', legendData.isAutomaticRenewal); 
+                  formData.append('contractAmount', legendData.isContractAmount);
+                  formData.append('hourlyRate', legendData.isHourlyRate);
+                  formData.append('maxiHours', legendData.isMaxHours);
+                  formData.append('businessUnitApprover', legendData.unitApprover);
+                  formData.append('businessUnitRepresentative', legendData.unitRep);
+                  formData.append('procurementRepresentative', legendData.isProRep);
+                  formData.append('contractPurposeScope', legendData.supplyServiceContract);
+                  formData.append('materialByLegend', legendData.specificMaterial);
+                  formData.append('transactionPurpose', legendData.PurposeTrans);
+                  formData.append('legendConfidentialInfo', legendData.legendConfInfo);
+                  formData.append('otherPartyConfidentialInfo', legendData.otherConfInfo);
+                  formData.append('isConfInfoShared', legendData.isConfidentiality);
+                  formData.append('nonConfidentialLegendInfo', legendData.legendConfidentialInfo);
+                  formData.append('nonConfidentialOtherPartyInfo', legendData.otherPartyConf);
+                  formData.append('isOtherPartyCollectInfo', legendData.isCollect);
+                  formData.append('otherPartySharedData', legendData.personalDataType);
+                  formData.append('attachments', selectedFile);
+                  formData.append('formStatus', "Saved");
+                  formData.append('userId', sessionData.userId);
+                  formData.append('userName', sessionData.userName);
+                  formData.append('email', sessionData.email);
+            
+		const res = await fetch(
+			'http://localhost:3000/api/vi/forms/',
+			{
+				method: 'POST',
+				body: formData,
+			}
+		);
+			// .then((response) => response.json())
+			// .then((result) => {
+			// 	console.log('Success:', result);
+			// })
+			// .catch((error) => {
+			// 	console.error('Error:', error);
+			// });
+
+                  const data = await res.json();
+                  if(data.status === 200 && data){
+                        window.alert("Saved Successful");
+                        console.log("Saved Successful");
+                        
+                  }else{
+                        window.alert("Invalid Home Details");
+                        console.log("Invalid Home Details");
+                        
+                  }
+	};
+
+       const handleSaveAgain = async (e) => {
+              e.preventDefault();
+		var formData = new FormData();
+                  formData.append('todaysDate', legendData.startDate);
+                  formData.append('proInvoloveRequired' , legendData.isProcurementInvolvement);
+                  formData.append('proDiligenceCompleted', legendData.isProcurementDiligence );
+                  formData.append('request', legendData.isRequestLegalDepartment);
+                  formData.append('carExpenditure' , legendData.isCapitalAppropriationRequest);
+                  formData.append('legendBiotechEntity', legendData.legendBiotechContracting );
+                  formData.append('submittingDepartment', legendData.legendSubmittingDepartment);
+                  formData.append('contract1LegalName' ,legendData.legalNameOfOtherParty);
+                  formData.append('contract1FullName', legendData.legendAddressOfOtherParty );
+                  formData.append('contract1NameAndEmail', legendData.legendContactOneNameAndEmail);
+                  formData.append('contract2LegalName' ,  legendData.legalNameOfOtherPartyToContractTwo);
+                  formData.append('contract2FullName', legendData.legendAddressOfOtherPartyToContractTwo );
+                  formData.append('contract2NameAndEmail', legendData.legendContactOneNameAndEmailToContractTwo);
+                  formData.append('existingAgreement', legendData.isThisRelatetoExistAgr);
+                  formData.append('confidentialityAgreement', legendData.isConfidentialityAgreement); 
+                  formData.append('sanctionsCheck', legendData.isSanctionsCheck);
+                  formData.append('contractStartDate', legendData.exStartDate);
+                  formData.append('contractEndDate', legendData.exEndDate);
+                  formData.append('contractType', legendData.istypeOfContract); 
+                  formData.append('otherContractType',legendData.isIfAny);
+                  formData.append('renewalOrAgreement', legendData.isAutomaticRenewal); 
+                  formData.append('contractAmount', legendData.isContractAmount);
+                  formData.append('hourlyRate', legendData.isHourlyRate);
+                  formData.append('maxiHours', legendData.isMaxHours);
+                  formData.append('businessUnitApprover', legendData.unitApprover);
+                  formData.append('businessUnitRepresentative', legendData.unitRep);
+                  formData.append('procurementRepresentative', legendData.isProRep);
+                  formData.append('contractPurposeScope', legendData.supplyServiceContract);
+                  formData.append('materialByLegend', legendData.specificMaterial);
+                  formData.append('transactionPurpose', legendData.PurposeTrans);
+                  formData.append('legendConfidentialInfo', legendData.legendConfInfo);
+                  formData.append('otherPartyConfidentialInfo', legendData.otherConfInfo);
+                  formData.append('isConfInfoShared', legendData.isConfidentiality);
+                  formData.append('nonConfidentialLegendInfo', legendData.legendConfidentialInfo);
+                  formData.append('nonConfidentialOtherPartyInfo', legendData.otherPartyConf);
+                  formData.append('isOtherPartyCollectInfo', legendData.isCollect);
+                  formData.append('otherPartySharedData', legendData.personalDataType);
+                  formData.append('attachments', selectedFile);
+                  formData.append('formStatus', "Saved");
+                  formData.append('userId', sessionData.userId);
+                  formData.append('userName', sessionData.userName);
+                  formData.append('email', sessionData.email);
+
+		const res = await fetch(
+                        `http://localhost:3000/api/vi/forms/${legendData.formId}`
+			,
+			{
+				method: 'PUT',
+				body: formData,
+			}
+		);
+			
+                  const data = await res.json();
+                  if(data.status === 200 && data){
+                        window.alert("Saved Successful");
+                        console.log("Saved Successful");
+                        
+                  }else{
+                        window.alert("Invalid Home Details");
+                        console.log("Invalid Home Details");
+                        
+                  }
+	}
+
+    const handleSubmit = async (e) => {
               e.preventDefault();
 		var formData = new FormData();
                   formData.append('todaysDate', legendData.startDate);
@@ -196,8 +341,8 @@ const  HomePage = () => {
 
                   const data = await res.json();
                   if(data.status === 200 && data){
-                        window.alert("Home Details Successful");
-                        console.log("Home Details Successful");
+                        window.alert("Submitted Successful");
+                        console.log("Submitted Successful");
                         
                   }else{
                         window.alert("Invalid Home Details");
@@ -205,6 +350,81 @@ const  HomePage = () => {
                         
                   }
 	};
+
+
+       const handleSubmitAgain = async (e) => {
+              e.preventDefault();
+		var formData = new FormData();
+                  formData.append('todaysDate', legendData.startDate);
+                  formData.append('proInvoloveRequired' , legendData.isProcurementInvolvement);
+                  formData.append('proDiligenceCompleted', legendData.isProcurementDiligence );
+                  formData.append('request', legendData.isRequestLegalDepartment);
+                  formData.append('carExpenditure' , legendData.isCapitalAppropriationRequest);
+                  formData.append('legendBiotechEntity', legendData.legendBiotechContracting );
+                  formData.append('submittingDepartment', legendData.legendSubmittingDepartment);
+                  formData.append('contract1LegalName' ,legendData.legalNameOfOtherParty);
+                  formData.append('contract1FullName', legendData.legendAddressOfOtherParty );
+                  formData.append('contract1NameAndEmail', legendData.legendContactOneNameAndEmail);
+                  formData.append('contract2LegalName' ,  legendData.legalNameOfOtherPartyToContractTwo);
+                  formData.append('contract2FullName', legendData.legendAddressOfOtherPartyToContractTwo );
+                  formData.append('contract2NameAndEmail', legendData.legendContactOneNameAndEmailToContractTwo);
+                  formData.append('existingAgreement', legendData.isThisRelatetoExistAgr);
+                  formData.append('confidentialityAgreement', legendData.isConfidentialityAgreement); 
+                  formData.append('sanctionsCheck', legendData.isSanctionsCheck);
+                  formData.append('contractStartDate', legendData.exStartDate);
+                  formData.append('contractEndDate', legendData.exEndDate);
+                  formData.append('contractType', legendData.istypeOfContract); 
+                  formData.append('otherContractType',legendData.isIfAny);
+                  formData.append('renewalOrAgreement', legendData.isAutomaticRenewal); 
+                  formData.append('contractAmount', legendData.isContractAmount);
+                  formData.append('hourlyRate', legendData.isHourlyRate);
+                  formData.append('maxiHours', legendData.isMaxHours);
+                  formData.append('businessUnitApprover', legendData.unitApprover);
+                  formData.append('businessUnitRepresentative', legendData.unitRep);
+                  formData.append('procurementRepresentative', legendData.isProRep);
+                  formData.append('contractPurposeScope', legendData.supplyServiceContract);
+                  formData.append('materialByLegend', legendData.specificMaterial);
+                  formData.append('transactionPurpose', legendData.PurposeTrans);
+                  formData.append('legendConfidentialInfo', legendData.legendConfInfo);
+                  formData.append('otherPartyConfidentialInfo', legendData.otherConfInfo);
+                  formData.append('isConfInfoShared', legendData.isConfidentiality);
+                  formData.append('nonConfidentialLegendInfo', legendData.legendConfidentialInfo);
+                  formData.append('nonConfidentialOtherPartyInfo', legendData.otherPartyConf);
+                  formData.append('isOtherPartyCollectInfo', legendData.isCollect);
+                  formData.append('otherPartySharedData', legendData.personalDataType);
+                  formData.append('attachments', selectedFile);
+                  formData.append('formStatus', "Submitted");
+                  formData.append('userId', sessionData.userId);
+                  formData.append('userName', sessionData.userName);
+                  formData.append('email', sessionData.email);
+
+		const res = await fetch(
+                        `http://localhost:3000/api/vi/forms/${legendData.formId}`
+			,
+			{
+				method: 'PUT',
+				body: formData,
+			}
+		);
+			// .then((response) => response.json())
+			// .then((result) => {
+			// 	console.log('Success:', result);
+			// })
+			// .catch((error) => {
+			// 	console.error('Error:', error);
+			// });
+
+                  const data = await res.json();
+                  if(data.status === 200 && data){
+                        window.alert("Submitted Successful");
+                        console.log("Submitted Successful");
+                        
+                  }else{
+                        window.alert("Invalid Home Details");
+                        console.log("Invalid Home Details");
+                        
+                  }
+	}
 
 
 
@@ -291,75 +511,75 @@ const  HomePage = () => {
 //       console.log(legendData.startDate);
 //   };
 
-  const PostData =  async (e) => {
-        e.preventDefault();
+//   const PostData =  async (e) => {
+//         e.preventDefault();
 
-        const res = await fetch("http://localhost:3000/api/vi/forms", {
-              method: "POST",
-              headers:{
-                    "Content-Type" : "application/json"
-              },
-              body:JSON.stringify({
-                  todaysDate : legendData.startDate,
-                  proInvoloveRequired : legendData.isProcurementInvolvement,
-                  proDiligenceCompleted : legendData.isProcurementDiligence, 
-                  request : legendData.isRequestLegalDepartment, 
-                  carExpenditure : legendData.isCapitalAppropriationRequest,
-                  legendBiotechEntity : legendData.legendBiotechContracting,
-                  submittingDepartment : legendData.legendSubmittingDepartment,
-                  contract1LegalName : legendData.legalNameOfOtherParty,
-                  contract1FullName : legendData.legendAddressOfOtherParty, 
-                  contract1NameAndEmail : legendData.legendContactOneNameAndEmail,
-                  contract2LegalName : legendData.legalNameOfOtherPartyToContractTwo,
-                  contract2FullName : legendData.legendAddressOfOtherPartyToContractTwo,
-                  contract2NameAndEmail : legendData.legendContactOneNameAndEmailToContractTwo,
-                  existingAgreement: legendData.isThisRelatetoExistAgr,
-                  confidentialityAgreement : legendData.isConfidentialityAgreement, 
-                  sanctionsCheck : legendData.isSanctionsCheck,
-                  contractStartDate: legendData.exStartDate,
-                  contractEndDate: legendData.exEndDate,
-                  contractType : legendData.istypeOfContract, 
-                  otherContractType :legendData.isIfAny,
-                  renewalOrAgreement : legendData.isAutomaticRenewal, 
-                  contractAmount : legendData.isContractAmount,
-                  hourlyRate : legendData.isHourlyRate,
-                  maxiHours : legendData.isMaxHours,
-                  businessUnitApprover : legendData.unitApprover,
-                  businessUnitRepresentative : legendData.unitRep,
-                  procurementRepresentative : legendData.isProRep,
-                  contractPurposeScope : legendData.supplyServiceContract,
-                  materialByLegend : legendData.specificMaterial,
-                  transactionPurpose : legendData.PurposeTrans,
-                  legendConfidentialInfo : legendData.legendConfInfo,
-                  otherPartyConfidentialInfo : legendData.otherConfInfo,
-                  isConfInfoShared : legendData.isConfidentiality,
-                  nonConfidentialLegendInfo : legendData.legendConfidentialInfo,
-                  nonConfidentialOtherPartyInfo : legendData.otherPartyConf,
-                  isOtherPartyCollectInfo : legendData.isCollect,
-                  otherPartySharedData : legendData.personalDataType,
-                  attachments : selectedFile,
-                  formStatus: "Submitted",
-                  userId : sessionData.userId,
-                  userName : sessionData.userName,
-                  email: sessionData.email
-              })
-        });
-        const data = await res.json();
-        if(data.status === 200 && data){
-              window.alert("Home Details Successful");
-              console.log("Home Details Successful");
+//         const res = await fetch("http://localhost:3000/api/vi/forms", {
+//               method: "POST",
+//               headers:{
+//                     "Content-Type" : "application/json"
+//               },
+//               body:JSON.stringify({
+//                   todaysDate : legendData.startDate,
+//                   proInvoloveRequired : legendData.isProcurementInvolvement,
+//                   proDiligenceCompleted : legendData.isProcurementDiligence, 
+//                   request : legendData.isRequestLegalDepartment, 
+//                   carExpenditure : legendData.isCapitalAppropriationRequest,
+//                   legendBiotechEntity : legendData.legendBiotechContracting,
+//                   submittingDepartment : legendData.legendSubmittingDepartment,
+//                   contract1LegalName : legendData.legalNameOfOtherParty,
+//                   contract1FullName : legendData.legendAddressOfOtherParty, 
+//                   contract1NameAndEmail : legendData.legendContactOneNameAndEmail,
+//                   contract2LegalName : legendData.legalNameOfOtherPartyToContractTwo,
+//                   contract2FullName : legendData.legendAddressOfOtherPartyToContractTwo,
+//                   contract2NameAndEmail : legendData.legendContactOneNameAndEmailToContractTwo,
+//                   existingAgreement: legendData.isThisRelatetoExistAgr,
+//                   confidentialityAgreement : legendData.isConfidentialityAgreement, 
+//                   sanctionsCheck : legendData.isSanctionsCheck,
+//                   contractStartDate: legendData.exStartDate,
+//                   contractEndDate: legendData.exEndDate,
+//                   contractType : legendData.istypeOfContract, 
+//                   otherContractType :legendData.isIfAny,
+//                   renewalOrAgreement : legendData.isAutomaticRenewal, 
+//                   contractAmount : legendData.isContractAmount,
+//                   hourlyRate : legendData.isHourlyRate,
+//                   maxiHours : legendData.isMaxHours,
+//                   businessUnitApprover : legendData.unitApprover,
+//                   businessUnitRepresentative : legendData.unitRep,
+//                   procurementRepresentative : legendData.isProRep,
+//                   contractPurposeScope : legendData.supplyServiceContract,
+//                   materialByLegend : legendData.specificMaterial,
+//                   transactionPurpose : legendData.PurposeTrans,
+//                   legendConfidentialInfo : legendData.legendConfInfo,
+//                   otherPartyConfidentialInfo : legendData.otherConfInfo,
+//                   isConfInfoShared : legendData.isConfidentiality,
+//                   nonConfidentialLegendInfo : legendData.legendConfidentialInfo,
+//                   nonConfidentialOtherPartyInfo : legendData.otherPartyConf,
+//                   isOtherPartyCollectInfo : legendData.isCollect,
+//                   otherPartySharedData : legendData.personalDataType,
+//                   attachments : selectedFile,
+//                   formStatus: "Submitted",
+//                   userId : sessionData.userId,
+//                   userName : sessionData.userName,
+//                   email: sessionData.email
+//               })
+//         });
+//         const data = await res.json();
+//         if(data.status === 200 && data){
+//               window.alert("Home Details Successful");
+//               console.log("Home Details Successful");
              
-        }else{
-               window.alert("Invalid Home Details");
-              console.log("Invalid Home Details");
+//         }else{
+//                window.alert("Invalid Home Details");
+//               console.log("Invalid Home Details");
               
-        }
-  }
+//         }
+//   }
 
   return (
     <>
     <article>
-        <form className="form" method="POST">
+        <form className="form">
             <div className="container">
                  <div className="form-intake">
                        <img src={logo} height={200}
@@ -988,8 +1208,12 @@ const  HomePage = () => {
                   </div>
 
                   <div className="form-flex-btn">
-                        <button type="submit">Save</button>
-                        <button type='submit' onClick={handleSubmission}>Submit</button>
+                        {legendData.formStatus === "" && <button type="submit" onClick={handleSave}>Save</button>}
+                        {legendData.formStatus === "" && <button type="submit" onClick={handleSubmit}>Submit</button>}
+                        {legendData.formStatus === "Saved"  && <button type='submit' onClick={handleSaveAgain}>Save</button> }
+                        {legendData.formStatus === "Saved"  && <button type='submit' onClick={handleSubmitAgain}>Submit</button> }   
+                        {legendData.formStatus === "Submitted"  && <button type='submit' disabled={true} >Save</button> }
+                        {legendData.formStatus === "Submitted"  && <button type='submit' disabled={true} >Submit</button> } 
                   </div>
             </div>
         </form>
