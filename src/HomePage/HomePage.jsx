@@ -5,9 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import  logo  from '../assets/images/LegendBiotech.jpg';
 
 const  HomePage = () => {
-      const [startDate, setStartDate] = useState(new Date());
-      const [exStartDate, setExStartDate] = useState(new Date());
-      const [exEndDate, setExEndDate] = useState(new Date());
+      //const [startDate, setStartDate] = useState(new Date());
+      //const [exStartDate, setExStartDate] = useState(new Date());
+     // const [exEndDate, setExEndDate] = useState(new Date());
 
       const [selectedFile, setSelectedFile] = useState([]);
 	const [isFilePicked, setIsFilePicked] = useState(false);
@@ -22,6 +22,7 @@ const  HomePage = () => {
 
 
       const [legendData, setLegendData] = useState({
+            startDate:'',
             isProcurementInvolvement: "",
             isProcurementDiligence:"",
             isRequestLegalDepartment:"",
@@ -37,6 +38,8 @@ const  HomePage = () => {
             isThisRelatetoExistAgr:'',
             isConfidentialityAgreement:'',
             isSanctionsCheck:'',
+            exStartDate:'',
+            exEndDate:'',
             istypeOfContract:'',
             isIfAny:'',
             isAutomaticRenewal:'',
@@ -70,6 +73,7 @@ const  HomePage = () => {
             if(users.status === 200 && usersData){
 
                   setLegendData({...legendData ,
+                        startDate: usersData.todaysDate,
                         isProcurementInvolvement: usersData.proInvoloveRequired,
                         isProcurementDiligence: usersData.proDiligenceCompleted,
                         isRequestLegalDepartment: usersData.request,
@@ -77,6 +81,36 @@ const  HomePage = () => {
                         legendBiotechContracting  : usersData.legendBiotechEntity,
                         legendSubmittingDepartment  : usersData.submittingDepartment,
                         legalNameOfOtherParty  : usersData.contract1LegalName,
+                        legendAddressOfOtherParty : usersData.contract1FullName,
+                        legendContactOneNameAndEmail : usersData.contract1NameAndEmail,
+                        legalNameOfOtherPartyToContractTwo : usersData.contract2LegalName,
+                        legendAddressOfOtherPartyToContractTwo : usersData.contract2FullName,
+                        legendContactOneNameAndEmailToContractTwo : usersData.contract2NameAndEmail,
+                        isThisRelatetoExistAgr : usersData.existingAgreement,
+                        isConfidentialityAgreement : usersData.confidentialityAgreement,
+                        isSanctionsCheck : usersData.sanctionsCheck,
+                        exStartDate : usersData.contractStartDate,
+                        exEndDate : usersData.contractEndDate,
+                        istypeOfContract : usersData.contractType,
+                        isIfAny : usersData.otherContractType,
+                        isAutomaticRenewal : usersData.renewalOrAgreement,
+                        isContractAmount : usersData.contractAmount,
+                        isHourlyRate : usersData.hourlyRate,
+                        isMaxHours : usersData.maxiHours,
+                        unitApprover : usersData.businessUnitApprover,
+                        unitRep : usersData.businessUnitRepresentative,
+                        isProRep : usersData.procurementRepresentative,
+                        supplyServiceContract : usersData.contractPurposeScope,
+                        specificMaterial : usersData.materialByLegend,
+                        PurposeTrans : usersData.transactionPurpose,
+                        legendConfInfo : usersData.legendConfidentialInfo,
+                        otherConfInfo : usersData.otherPartyConfidentialInfo,
+                        isConfidentiality : usersData.isConfInfoShared,
+                        legendConfidentialInfo : usersData.nonConfidentialLegendInfo,
+                        otherPartyConf : usersData.nonConfidentialOtherPartyInfo,
+                        isCollect : usersData.isOtherPartyCollectInfo,
+                        personalDataType : usersData.otherPartySharedData,
+                        selectedFile : usersData.attachments
                   })
             }
   };
@@ -99,10 +133,52 @@ const  HomePage = () => {
 	};
 
       const handleSubmission = () => {
-		const formData = new FormData();
-		formData.append('attachments', selectedFile, selectedFile.name);
+		var formData = new FormData();
+                  formData.append('todaysDate', legendData.startDate);
+                  formData.append('proInvoloveRequired' , legendData.isProcurementInvolvement);
+                  formData.append('proDiligenceCompleted', legendData.isProcurementDiligence );
+                  formData.append('request', legendData.isRequestLegalDepartment);
+                  formData.append('carExpenditure' , legendData.isCapitalAppropriationRequest);
+                  formData.append('legendBiotechEntity', legendData.legendBiotechContracting );
+                  formData.append('submittingDepartment', legendData.legendSubmittingDepartment);
+                  formData.append('contract1LegalName' ,legendData.legalNameOfOtherParty);
+                  formData.append('contract1FullName', legendData.legendAddressOfOtherParty );
+                  formData.append('contract1NameAndEmail', legendData.legendContactOneNameAndEmail);
+                  formData.append('contract2LegalName' ,  legendData.legalNameOfOtherPartyToContractTwo);
+                  formData.append('contract2FullName', legendData.legendAddressOfOtherPartyToContractTwo );
+                  formData.append('contract2NameAndEmail', legendData.legendContactOneNameAndEmailToContractTwo);
+                  formData.append('existingAgreement', legendData.isThisRelatetoExistAgr);
+                  formData.append('confidentialityAgreement', legendData.isConfidentialityAgreement); 
+                  formData.append('sanctionsCheck', legendData.isSanctionsCheck);
+                  formData.append('contractStartDate', legendData.exStartDate);
+                  formData.append('contractEndDate', legendData.exEndDate);
+                  formData.append('contractType', legendData.istypeOfContract); 
+                  formData.append('otherContractType',legendData.isIfAny);
+                  formData.append('renewalOrAgreement', legendData.isAutomaticRenewal); 
+                  formData.append('contractAmount', legendData.isContractAmount);
+                  formData.append('hourlyRate', legendData.isHourlyRate);
+                  formData.append('maxiHours', legendData.isMaxHours);
+                  formData.append('businessUnitApprover', legendData.unitApprover);
+                  formData.append('businessUnitRepresentative', legendData.unitRep);
+                  formData.append('procurementRepresentative', legendData.isProRep);
+                  formData.append('contractPurposeScope', legendData.supplyServiceContract);
+                  formData.append('materialByLegend', legendData.specificMaterial);
+                  formData.append('transactionPurpose', legendData.PurposeTrans);
+                  formData.append('legendConfidentialInfo', legendData.legendConfInfo);
+                  formData.append('otherPartyConfidentialInfo', legendData.otherConfInfo);
+                  formData.append('isConfInfoShared', legendData.isConfidentiality);
+                  formData.append('nonConfidentialLegendInfo', legendData.legendConfidentialInfo);
+                  formData.append('nonConfidentialOtherPartyInfo', legendData.otherPartyConf);
+                  formData.append('isOtherPartyCollectInfo', legendData.isCollect);
+                  formData.append('otherPartySharedData', legendData.personalDataType);
+                  formData.append('attachments', selectedFile);
+                  formData.append('formStatus', "Submitted");
+                  formData.append('userId', sessionData.userId);
+                  formData.append('userName', sessionData.userName);
+                  formData.append('email', sessionData.email);
+            
 		fetch(
-			'http://localhost:3000/api/vi/forms/uploads',
+			'http://localhost:3000/api/vi/forms/',
 			{
 				method: 'POST',
 				body: formData,
@@ -119,88 +195,88 @@ const  HomePage = () => {
 
 
 
-       const handleSubmit = (e) => {
-            e.preventDefault();
-            //   if ( legendData.isProcurementInvolvement && 
-            //        legendData.isProcurementDiligence && 
-            //        legendData.isRequestLegalDepartment && 
-            //        legendData.isCapitalAppropriationRequest &&
-            //        legendData.legendBiotechContracting &&
-            //        legendData.legendSubmittingDepartment &&
-            //        legendData.legalNameOfOtherParty &&
-            //        legendData.legendAddressOfOtherParty && 
-            //        legendData.legendContactOneNameAndEmail &&
-            //        legendData.legalNameOfOtherPartyToContractTwo &&
-            //        legendData.legendAddressOfOtherPartyToContractTwo &&
-            //        legendData.legendContactOneNameAndEmailToContractTwo &&
-            //        legendData.isThisRelatetoExistAgr &&
-            //        legendData.isConfidentialityAgreement && 
-            //        legendData.isSanctionsCheck &&
-            //        legendData.istypeOfContract && 
-            //       legendData.isIfAny && 
-            //       legendData.isAutomaticRenewal && 
-            //       legendData.isContractAmount &&
-            //       legendData.isHourlyRate &&
-            //       legendData.isMaxHours &&
-            //       legendData.unitApprover &&
-            //       legendData.unitRep &&
-            //       legendData.isProRep &&
-            //       legendData.supplyServiceContract &&
-            //       legendData.specificMaterial &&
-            //       legendData.PurposeTrans &&
-            //       legendData.legendConfInfo &&
-            //       legendData.otherConfInfo &&
-            //       legendData.isConfidentiality &&
-            //       legendData.legendConfidentialInfo &&
-            //       legendData.otherPartyConf &&
-            //       legendData.isCollect &&
-            //       legendData.personalDataType) {
-             const newLegendData = { ...legendData, id: new Date().getTime().toString(), enteredDate: startDate, expectedStartDate: exStartDate, expectedEndtDate : exEndDate, attachedFile: selectedFile };
-             setLegendDetails([...legendDetails, newLegendData]);
-             setLegendData({ 
-                   isProcurementInvolvement: '', 
-                   isProcurementDiligence: '',
-                   isRequestLegalDepartment:'',
-                   isCapitalAppropriationRequest:'',
-                   legendBiotechContracting:'',
-                   legendSubmittingDepartment:'',
-                   legalNameOfOtherParty:'',
-                   legendAddressOfOtherParty:'',
-                   legendContactOneNameAndEmail:'',
-                   legalNameOfOtherPartyToContractTwo:'',
-                   legendAddressOfOtherPartyToContractTwo:'',
-                   legendContactOneNameAndEmailToContractTwo:'',
-                   isThisRelatetoExistAgr:'',
-                   isConfidentialityAgreement:'',
-                   isSanctionsCheck:'',
-                   istypeOfContract:'',
-                   isIfAny:'',
-                   isAutomaticRenewal:'',
-                   isContractAmount:'',
-                   isHourlyRate:'',
-                   isMaxHours:'',
-                   unitApprover:'',
-                   unitRep:'',
-                   isProRep: '',
-                   supplyServiceContract:'',
-                   specificMaterial:'',
-                   PurposeTrans: '',
-                   legendConfInfo: '',
-                   otherConfInfo: '',
-                   isConfidentiality:'',
-                   legendConfidentialInfo:'',
-                   otherPartyConf: '',
-                   isCollect: '',
-                   personalDataType:''
-                  });
+//        const handleSubmit = (e) => {
+//             e.preventDefault();
+//             //   if ( legendData.isProcurementInvolvement && 
+//             //        legendData.isProcurementDiligence && 
+//             //        legendData.isRequestLegalDepartment && 
+//             //        legendData.isCapitalAppropriationRequest &&
+//             //        legendData.legendBiotechContracting &&
+//             //        legendData.legendSubmittingDepartment &&
+//             //        legendData.legalNameOfOtherParty &&
+//             //        legendData.legendAddressOfOtherParty && 
+//             //        legendData.legendContactOneNameAndEmail &&
+//             //        legendData.legalNameOfOtherPartyToContractTwo &&
+//             //        legendData.legendAddressOfOtherPartyToContractTwo &&
+//             //        legendData.legendContactOneNameAndEmailToContractTwo &&
+//             //        legendData.isThisRelatetoExistAgr &&
+//             //        legendData.isConfidentialityAgreement && 
+//             //        legendData.isSanctionsCheck &&
+//             //        legendData.istypeOfContract && 
+//             //       legendData.isIfAny && 
+//             //       legendData.isAutomaticRenewal && 
+//             //       legendData.isContractAmount &&
+//             //       legendData.isHourlyRate &&
+//             //       legendData.isMaxHours &&
+//             //       legendData.unitApprover &&
+//             //       legendData.unitRep &&
+//             //       legendData.isProRep &&
+//             //       legendData.supplyServiceContract &&
+//             //       legendData.specificMaterial &&
+//             //       legendData.PurposeTrans &&
+//             //       legendData.legendConfInfo &&
+//             //       legendData.otherConfInfo &&
+//             //       legendData.isConfidentiality &&
+//             //       legendData.legendConfidentialInfo &&
+//             //       legendData.otherPartyConf &&
+//             //       legendData.isCollect &&
+//             //       legendData.personalDataType) {
+//              const newLegendData = { ...legendData, id: new Date().getTime().toString(), attachedFile: selectedFile };
+//              setLegendDetails([...legendDetails, newLegendData]);
+//              setLegendData({ 
+//                    isProcurementInvolvement: '', 
+//                    isProcurementDiligence: '',
+//                    isRequestLegalDepartment:'',
+//                    isCapitalAppropriationRequest:'',
+//                    legendBiotechContracting:'',
+//                    legendSubmittingDepartment:'',
+//                    legalNameOfOtherParty:'',
+//                    legendAddressOfOtherParty:'',
+//                    legendContactOneNameAndEmail:'',
+//                    legalNameOfOtherPartyToContractTwo:'',
+//                    legendAddressOfOtherPartyToContractTwo:'',
+//                    legendContactOneNameAndEmailToContractTwo:'',
+//                    isThisRelatetoExistAgr:'',
+//                    isConfidentialityAgreement:'',
+//                    isSanctionsCheck:'',
+//                    istypeOfContract:'',
+//                    isIfAny:'',
+//                    isAutomaticRenewal:'',
+//                    isContractAmount:'',
+//                    isHourlyRate:'',
+//                    isMaxHours:'',
+//                    unitApprover:'',
+//                    unitRep:'',
+//                    isProRep: '',
+//                    supplyServiceContract:'',
+//                    specificMaterial:'',
+//                    PurposeTrans: '',
+//                    legendConfInfo: '',
+//                    otherConfInfo: '',
+//                    isConfidentiality:'',
+//                    legendConfidentialInfo:'',
+//                    otherPartyConf: '',
+//                    isCollect: '',
+//                    personalDataType:''
+//                   });
              
-      //  }else{
-      //        alert("Fill all the fields!")
-      //  }
-      console.log(legendData);
-      console.log(legendDetails); 
-      console.log(startDate);
-  };
+//       //  }else{
+//       //        alert("Fill all the fields!")
+//       //  }
+//       console.log(legendData);
+//       console.log(legendDetails); 
+//       console.log(legendData.startDate);
+//   };
 
   const PostData =  async (e) => {
         e.preventDefault();
@@ -211,7 +287,7 @@ const  HomePage = () => {
                     "Content-Type" : "application/json"
               },
               body:JSON.stringify({
-                  todaysDate : startDate,
+                  todaysDate : legendData.startDate,
                   proInvoloveRequired : legendData.isProcurementInvolvement,
                   proDiligenceCompleted : legendData.isProcurementDiligence, 
                   request : legendData.isRequestLegalDepartment, 
@@ -227,8 +303,8 @@ const  HomePage = () => {
                   existingAgreement: legendData.isThisRelatetoExistAgr,
                   confidentialityAgreement : legendData.isConfidentialityAgreement, 
                   sanctionsCheck : legendData.isSanctionsCheck,
-                  contractStartDate: exStartDate,
-                  contractEndDate: exEndDate,
+                  contractStartDate: legendData.exStartDate,
+                  contractEndDate: legendData.exEndDate,
                   contractType : legendData.istypeOfContract, 
                   otherContractType :legendData.isIfAny,
                   renewalOrAgreement : legendData.isAutomaticRenewal, 
@@ -285,9 +361,10 @@ const  HomePage = () => {
 
                  <div className="form-flex">
                         <label><b>Today's Date</b></label>
-                         <DatePicker 
+                         {/* <DatePicker 
                               selected={startDate} 
-                              onChange={(date) => setStartDate(date)} />
+                              onChange={(date) => setStartDate(date)} /> */}
+                              <input type="date" value={legendData.startDate} name="startDate" onChange={handleChange} />
                  </div>
                 
                  <div className="form-flex" onChange={handleChange}>
@@ -536,16 +613,18 @@ const  HomePage = () => {
                
                   <div  className="form-flex">
                         <label ><b>Expected Start Date of Contract </b></label> 
-                         <DatePicker 
+                         {/* <DatePicker 
                               selected={exStartDate} 
-                              onChange={(date) => setExStartDate(date)} /> 
+                              onChange={(date) => setExStartDate(date)} />  */}
+                              <input type="date" value={legendData.exStartDate} name="exStartDate" onChange={handleChange} />
                   </div>
                 
                 <div className="form-flex">
                       <label><b>Expected End Date of Contract</b></label>
-                       <DatePicker 
+                       {/* <DatePicker 
                               selected={exEndDate} 
-                              onChange={(date) => setExEndDate(date)} />
+                              onChange={(date) => setExEndDate(date)} /> */}
+                        <input type="date" value={legendData.exEndDate} name="exEndDate" onChange={handleChange} />
                 </div>
                
                 <div className="form-flex" onChange={handleChange}>
@@ -886,10 +965,10 @@ const  HomePage = () => {
                                                                   )}
                               </div>
                               
-                              <div>
+                              {/* <div>
                                     <button className="form-docs-btn" type="submit" onClick={handleSubmission}>Upload</button>
                               </div>
-                              
+                               */}
 
                         </div>
                         
@@ -897,7 +976,7 @@ const  HomePage = () => {
 
                   <div className="form-flex-btn">
                         <button type="submit">Save</button>
-                        <button type='submit' onClick={PostData}>Submit</button>
+                        <button type='submit' onClick={handleSubmission}>Submit</button>
                   </div>
             </div>
         </form>
