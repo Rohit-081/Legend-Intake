@@ -27,13 +27,13 @@ function LoginPage() {
     }
     console.log(loginData);
     console.log(loginDetails)
-    nav("/");
+   
   };
 
    const PostData =  async (e) => {
         e.preventDefault();
 
-        const res = await fetch("http://localhost:3000/api/vi/users", {
+        const res = await fetch("http://localhost:3000/api/vi/users/login", {
               method: "POST",
               headers:{
                     "Content-Type" : "application/json"
@@ -44,13 +44,16 @@ function LoginPage() {
                })
             });
         const data = await res.json();
+        localStorage.setItem("UserInfo",JSON.stringify(data))
+         nav("/");
 
-        if(data.status === 500 || !data){
-              window.alert("Invalid Login");
-              console.log("Invalid Login");
-        }else{
+        if(data.status === 200 || data){
               window.alert("Login Successful");
               console.log("Login Successful");
+              
+        }else{
+              window.alert("Invalid Login");
+              console.log("Invalid Login");
         }
       };
 

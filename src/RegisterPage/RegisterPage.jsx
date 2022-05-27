@@ -7,6 +7,7 @@ const RegisterPage = () => {
   const [registerData, setRegisterData] = useState({ username:'', email: '', psw: ''});
   const [registerDetails, setRegisterDetails] = useState([]);
   const nav = useNavigate();
+
   const handleChange = (e) => {
     console.log(e.target.value);
     const name = e.target.name;
@@ -23,7 +24,6 @@ const RegisterPage = () => {
     }
     console.log(registerData);
     console.log(registerDetails);
-    nav("/login");
   };
 
    const PostData =  async (e) => {
@@ -42,13 +42,14 @@ const RegisterPage = () => {
             });
         const data = await res.json();
 
-        if(data.status === 422 || !data){
+        if(data.status === 500 || !data){
               window.alert("Invalid Registration");
               console.log("Invalid Registration");
         }else{
               window.alert("Registration Successful");
               console.log("Registration Successful");
         }
+        nav("/login");
       };
 
   return (
@@ -75,8 +76,6 @@ const RegisterPage = () => {
                           <input type="password" placeholder="Enter Password" name="psw" value={registerData.psw} onChange={handleChange} id="psw" required />
                       </div>
                       
-                      
-                    
                       <button type="submit" className="registerbtn" onClick={PostData}>Register</button>
                       
               </div>    

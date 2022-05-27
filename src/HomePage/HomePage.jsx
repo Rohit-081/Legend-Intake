@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import './App.css'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,6 +12,13 @@ const  HomePage = () => {
       const [selectedFile, setSelectedFile] = useState([]);
 	const [isFilePicked, setIsFilePicked] = useState(false);
       const [legendDetails, setLegendDetails] = useState([]);
+
+      const sessionData = JSON.parse(localStorage.getItem('UserInfo')) || [];
+      console.log("UserId", sessionData.userId);
+      console.log("UserName", sessionData.userName);
+      console.log("Email", sessionData.email)
+
+      const url = `http://localhost:3000/api/vi/forms?formID=&userID=${sessionData.userId}`;
 
 
       const [legendData, setLegendData] = useState({
@@ -48,10 +55,36 @@ const  HomePage = () => {
             legendConfidentialInfo:'',
             otherPartyConf:'',
             isCollect:'',
-            personalDataType:'',
-            formStatus: ""
+            personalDataType:''
             
       })
+
+      const getUsers =  async () => {
+            console.log(url);
+            const response =  await fetch(url);
+            console.log(response);
+            const users = await response.json();
+            const usersData = users.formData;
+            console.log(usersData);
+            console.log(users.status);
+            if(users.status === 200 && usersData){
+
+                  setLegendData({...legendData ,
+                        isProcurementInvolvement: usersData.proInvoloveRequired,
+                        isProcurementDiligence: usersData.proDiligenceCompleted,
+                        isRequestLegalDepartment: usersData.request,
+                        isCapitalAppropriationRequest: usersData.carExpenditure,
+                        legendBiotechContracting  : usersData.legendBiotechEntity,
+                        legendSubmittingDepartment  : usersData.submittingDepartment,
+                        legalNameOfOtherParty  : usersData.contract1LegalName,
+                  })
+            }
+  };
+
+
+      useEffect(()=>{      
+           getUsers();
+      },[]);
       
       const handleChange = (e) => {
             console.log(e.target.value);
@@ -69,7 +102,7 @@ const  HomePage = () => {
 		const formData = new FormData();
 		formData.append('attachments', selectedFile, selectedFile.name);
 		fetch(
-			'http://localhost:3000/api/vi/forms',
+			'http://localhost:3000/api/vi/forms/uploads',
 			{
 				method: 'POST',
 				body: formData,
@@ -216,12 +249,14 @@ const  HomePage = () => {
                   isOtherPartyCollectInfo : legendData.isCollect,
                   otherPartySharedData : legendData.personalDataType,
                   attachments : selectedFile,
-                  formStatus: "Saved"
-
+                  formStatus: "Submitted",
+                  userId : sessionData.userId,
+                  userName : sessionData.userName,
+                  email: sessionData.email
               })
         });
-        const data = await res.json({});
-        if(data.status === 200|| !data){
+        const data = await res.json();
+        if(data.status === 200 && data){
               window.alert("Home Details Successful");
               console.log("Home Details Successful");
              
