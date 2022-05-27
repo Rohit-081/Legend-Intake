@@ -3,15 +3,16 @@ import './App.css'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import  logo  from '../assets/images/LegendBiotech.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const  HomePage = () => {
       //const [startDate, setStartDate] = useState(new Date());
       //const [exStartDate, setExStartDate] = useState(new Date());
      // const [exEndDate, setExEndDate] = useState(new Date());
-
+      const nav = useNavigate();
       const [selectedFile, setSelectedFile] = useState([]);
 	const [isFilePicked, setIsFilePicked] = useState(false);
-      const [legendDetails, setLegendDetails] = useState([]);
+      //const [legendDetails, setLegendDetails] = useState([]);
 
       const sessionData = JSON.parse(localStorage.getItem('UserInfo')) || [];
       console.log("UserId", sessionData.userId);
@@ -132,7 +133,8 @@ const  HomePage = () => {
 		setIsFilePicked(true);
 	};
 
-      const handleSubmission = () => {
+      const handleSubmission = async (e) => {
+              e.preventDefault();
 		var formData = new FormData();
                   formData.append('todaysDate', legendData.startDate);
                   formData.append('proInvoloveRequired' , legendData.isProcurementInvolvement);
@@ -177,20 +179,31 @@ const  HomePage = () => {
                   formData.append('userName', sessionData.userName);
                   formData.append('email', sessionData.email);
             
-		fetch(
+		const res = await fetch(
 			'http://localhost:3000/api/vi/forms/',
 			{
 				method: 'POST',
 				body: formData,
 			}
-		)
-			.then((response) => response.json())
-			.then((result) => {
-				console.log('Success:', result);
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
+		);
+			// .then((response) => response.json())
+			// .then((result) => {
+			// 	console.log('Success:', result);
+			// })
+			// .catch((error) => {
+			// 	console.error('Error:', error);
+			// });
+
+                  const data = await res.json();
+                  if(data.status === 200 && data){
+                        window.alert("Home Details Successful");
+                        console.log("Home Details Successful");
+                        
+                  }else{
+                        window.alert("Invalid Home Details");
+                        console.log("Invalid Home Details");
+                        
+                  }
 	};
 
 
