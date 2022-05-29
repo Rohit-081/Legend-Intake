@@ -12,6 +12,8 @@ const  HomePage = () => {
       //const [legendDetails, setLegendDetails] = useState([]);
 
       //const nav = useNavigate();
+      const current = new Date();
+      const currentDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
       const [selectedFile, setSelectedFile] = useState([]);
 	const [isFilePicked, setIsFilePicked] = useState(false);
       
@@ -25,7 +27,7 @@ const  HomePage = () => {
 
       const [legendData, setLegendData] = useState({
             formId:'',
-            startDate:'',
+            startDate:currentDate,
             isProcurementInvolvement: "",
             isProcurementDiligence:"",
             isRequestLegalDepartment:"",
@@ -203,6 +205,7 @@ const  HomePage = () => {
                   if(data.status === 200 && data){
                         window.alert("Saved Successful");
                         console.log("Saved Successful");
+                        window.location.reload(false);
                         
                   }else{
                         window.alert("Invalid Home Details");
@@ -270,6 +273,7 @@ const  HomePage = () => {
                   if(data.status === 200 && data){
                         window.alert("Saved Successful");
                         console.log("Saved Successful");
+                        window.location.reload(false);
                         
                   }else{
                         window.alert("Invalid Home Details");
@@ -343,6 +347,7 @@ const  HomePage = () => {
                   if(data.status === 200 && data){
                         window.alert("Submitted Successful");
                         console.log("Submitted Successful");
+                        window.location.reload(false);
                         
                   }else{
                         window.alert("Invalid Home Details");
@@ -418,6 +423,7 @@ const  HomePage = () => {
                   if(data.status === 200 && data){
                         window.alert("Submitted Successful");
                         console.log("Submitted Successful");
+                        window.location.reload(false);
                         
                   }else{
                         window.alert("Invalid Home Details");
@@ -597,7 +603,7 @@ const  HomePage = () => {
                          {/* <DatePicker 
                               selected={startDate} 
                               onChange={(date) => setStartDate(date)} /> */}
-                              <input type="date" value={legendData.startDate} name="startDate" onChange={handleChange} />
+                              <input type="text" value={legendData.startDate} disabled name="startDate" onChange={handleChange} />
                  </div>
                 
                  <div className="form-flex" onChange={handleChange}>
