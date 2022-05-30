@@ -3,7 +3,7 @@ import './App.css'
 //import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import  logo  from '../assets/images/LegendBiotech.jpg';
-import { useNavigate } from 'react-router-dom';
+
 
 const  HomePage = () => {
       //const [startDate, setStartDate] = useState(new Date());
